@@ -15,7 +15,7 @@ https://studio3t.com/download/
 http://portquiz.net:27017
 
 ## Documentos
-![alt text](/img/estructura.png)
+![alt text](img/estructura.png)
 
 - Formato JSON
 - cada documentos se identifica por el campo ``_id``

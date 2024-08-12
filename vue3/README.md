@@ -23,7 +23,7 @@ npm run dev
 ```
 
 ## Estructura de vue
-![alt text](/public/image.png)
+![alt text](img/image.png)
 - Dentro del ``` <template> </template> ```, contendrá etiquetas, elementos html, eventos, funciones y etc..
 - En el contenido se puede asignar una variable declarada o una función del script.
 - Dentro del contenido con ```{{ variable o funciones }}``` asi se imprime una variable o se ejecuta una función.

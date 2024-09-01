@@ -171,3 +171,84 @@ Las directivas en Vue.js son atributos especiales que se aplican a los elementos
      ```
 
 Estas son solo algunas de las directivas más comunes en Vue.js. Hay muchas otras directivas disponibles que proporcionan funcionalidades adicionales para manipular el DOM y los datos de manera eficiente.
+
+## Ejemplo de compasar variables, object, function de un componente a otro
+> En Vue 3, los props se utilizan para pasar datos de un componente padre a un componente hijo. Te mostraré un ejemplo sencillo de cómo hacerlo, incluyendo varios tipos de datos que puedes pasar como props.
+
+### Paso 1: Crear el Componente Hijo
+
+Primero, definamos un componente hijo llamado `ChildComponent.vue` que recibirá props de su componente padre.
+
+**ChildComponent.vue**
+```vue
+<template>
+  <div>
+    <h3>Props en el Componente Hijo</h3>
+    <p>Texto: {{ text }}</p>
+    <p>Número: {{ number }}</p>
+    <p>Booleano: {{ boolean }}</p>
+    <p>Objeto: {{ objectProp.name }}, Edad: {{ objectProp.age }}</p>
+    <p>Arreglo: {{ arrayProp.join(', ') }}</p>
+    <p>Función: {{ functionProp() }}</p>
+  </div>
+</template>
+
+<script setup>
+// en vue 3 ya no es necesario importar define defineProps
+
+// Definir las props que el componente hijo recibirá
+const props = defineProps({
+  text: String,
+  number: Number,
+  boolean: Boolean,
+  objectProp: Object,
+  arrayProp: Array,
+  functionProp: Function
+});
+</script>
+```
+
+### Paso 2: Crear el Componente Padre
+
+Ahora, crearemos un componente padre llamado `ParentComponent.vue` que enviará los props al componente hijo.
+
+**ParentComponent.vue**
+```vue
+<template>
+  <div>
+    <h1>Componente Padre</h1>
+    <ChildComponent 
+      text="Hola, Vue!" 
+      :number="123" 
+      :boolean="true" 
+      :object-prop="{ name: 'Juan', age: 30 }"
+      :array-prop="[1, 2, 3, 4, 5]"
+      :function-prop="sayHello"
+    />
+  </div>
+</template>
+
+<script setup>
+import ChildComponent from './ChildComponent.vue';
+
+// Definir métodos y otras lógicas aquí
+function sayHello() {
+  return '¡Hola desde la función!';
+}
+</script>
+
+```
+
+### Explicación
+
+1. **Componente Hijo (`ChildComponent.vue`)**: 
+   - Define una serie de props que puede recibir, cada una con un tipo de dato específico (`String`, `Number`, `Boolean`, `Object`, `Array`, `Function`).
+   - En el template, se muestran estos props.
+
+2. **Componente Padre (`ParentComponent.vue`)**:
+   - Importa el `ChildComponent` y lo utiliza en el template.
+   - Pasa diferentes tipos de datos como props al `ChildComponent`, incluyendo un string, número, booleano, objeto, arreglo y función.
+
+### ¿Cómo se utiliza?
+
+Al montar `ParentComponent.vue` en tu aplicación, verás que `ChildComponent.vue` recibe todos los props y los muestra en la pantalla. Este ejemplo cubre diferentes tipos de datos que puedes pasar como props y te proporciona una base sólida para entender cómo funcionan en Vue 3.

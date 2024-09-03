@@ -219,3 +219,69 @@ Configuración del idioma:
    - Las factories se definen utilizando la biblioteca Faker para generar datos falsos realistas y se pueden ejecutar usando el método ``factory()`` en tus pruebas de Laravel o en tus seeders.
   
 
+## Inertia.js (uso de Link)
+El componente **`Link`** es parte de la biblioteca **Inertia.js** cuando se utiliza con Vue 3. Aunque comparte algunas similitudes con `RouterLink` de Vue Router, tiene diferencias clave en su propósito y funcionamiento.
+
+### ¿Qué es el `Link` de Inertia.js?
+
+El componente **`Link`** de Inertia.js se utiliza para crear enlaces en aplicaciones que utilizan Inertia.js, una biblioteca que permite construir aplicaciones web modernas de una sola página (SPA) utilizando el stack clásico de servidor (como Laravel, Rails, Django, etc.). Inertia.js facilita la comunicación entre el backend y el frontend sin la necesidad de crear una API REST separada, ya que maneja automáticamente la sincronización de estados y la navegación de páginas de forma más fluida.
+
+**Cuándo usar `Link` de Inertia.js:**
+- Cuando estás construyendo una SPA utilizando Inertia.js con Vue 3.
+- Cuando deseas realizar navegaciones de página sin recargar toda la página y quieres mantener el estado de la aplicación de manera similar a cómo funcionaría en una aplicación SPA.
+- Cuando necesitas enviar datos o estados entre diferentes páginas de tu aplicación que están cargadas desde el servidor, pero quieres hacerlo de manera fluida como en una SPA.
+
+### Similitudes y diferencias con `RouterLink`
+
+**Similitudes:**
+- Ambos (`Link` de Inertia.js y `RouterLink` de Vue Router) son utilizados para crear enlaces de navegación en aplicaciones de una sola página (SPA).
+- Ambos permiten una experiencia de navegación fluida sin recargar toda la página.
+
+**Diferencias:**
+- **`RouterLink`** es específico de Vue Router y se utiliza para la navegación en aplicaciones SPA que utilizan Vue Router para el manejo de rutas en el frontend.
+- **`Link`** de **Inertia.js** se utiliza para manejar la navegación en aplicaciones que combinan un backend de servidor (como Laravel) con un frontend Vue 3, utilizando Inertia.js como una capa intermedia que evita la necesidad de una API REST completa. Permite la navegación como si fuera una SPA, pero mantiene la lógica del servidor y del frontend unificada.
+- **`Link`** de Inertia.js también permite enviar datos adicionales en las solicitudes de navegación, lo que puede ser útil cuando se necesita pasar parámetros o datos entre páginas en una aplicación que sigue un modelo de servidor clásico.
+
+### Ejemplo de uso del `Link` de Inertia.js
+
+Aquí tienes un ejemplo de cómo se utiliza el componente `Link` de Inertia.js en una aplicación Vue 3:
+
+```vue
+<template>
+  <div>
+    <nav>
+      <!-- Utiliza el componente Link de Inertia.js -->
+      <Link href="/home" class="nav-link">
+        <slot name="icon" />
+        <span class="mx-3">Home</span>
+      </Link>
+      <Link href="/about" class="nav-link">
+        <slot name="icon" />
+        <span class="mx-3">About</span>
+      </Link>
+    </nav>
+  </div>
+</template>
+
+<script>
+import { Link } from '@inertiajs/vue3';
+
+export default {
+  components: {
+    Link,
+  },
+};
+</script>
+```
+
+En este ejemplo:
+- **`<Link href="/home" class="nav-link">`** es un enlace que utiliza el componente `Link` de Inertia.js. Cuando se hace clic en él, Inertia.js maneja la navegación a la ruta `/home` sin recargar toda la página.
+- Puedes usar `href` para especificar la ruta de destino, y `class` para añadir clases CSS como con cualquier otro componente Vue.
+- Los `slots` permiten personalizar el contenido del enlace, como añadir un ícono o un texto.
+
+### Resumen
+
+- **`Link` de Inertia.js** es un componente para enlaces que facilita la navegación en aplicaciones de una sola página construidas con Inertia.js y Vue 3.
+- Es diferente de **`RouterLink`** porque está diseñado específicamente para trabajar con Inertia.js y aplicaciones que combinan un backend de servidor con un frontend SPA.
+- Proporciona una experiencia de navegación fluida similar a `RouterLink` pero con capacidades adicionales para integrarse con la lógica del backend del servidor.
+

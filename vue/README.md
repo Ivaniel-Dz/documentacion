@@ -252,3 +252,153 @@ function sayHello() {
 ### ¿Cómo se utiliza?
 
 Al montar `ParentComponent.vue` en tu aplicación, verás que `ChildComponent.vue` recibe todos los props y los muestra en la pantalla. Este ejemplo cubre diferentes tipos de datos que puedes pasar como props y te proporciona una base sólida para entender cómo funcionan en Vue 3.
+
+
+## Vue Router
+En Vue.js, el **Router** y el **Link** son herramientas esenciales para manejar la navegación entre diferentes componentes o páginas en una aplicación de una sola página (SPA, por sus siglas en inglés).
+
+### 1. Vue Router
+
+**Vue Router** es una biblioteca de Vue.js que se utiliza para manejar la navegación y el enrutamiento en aplicaciones de una sola página. Permite definir rutas en tu aplicación que corresponden a diferentes componentes y manejar la navegación del usuario entre ellos sin recargar la página.
+
+**Cuándo usarlo:**
+- Cuando tienes una aplicación Vue con múltiples vistas o páginas.
+- Cuando necesitas una navegación más compleja que la que se puede lograr con enlaces simples.
+- Cuando quieres mantener la experiencia de usuario fluida sin recargar toda la página.
+
+**Configuración básica de Vue Router:**
+
+Para usar Vue Router, debes instalarlo y configurarlo en tu proyecto Vue. A continuación, te muestro cómo se configura:
+
+```bash
+npm install vue-router
+```
+
+Luego, configura el router en tu archivo principal de Vue (por ejemplo, `main.js`):
+
+```javascript
+import { createApp } from 'vue';
+import App from './App.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+
+// Importa los componentes que se usarán como rutas
+import Home from './components/Home.vue';
+import About from './components/About.vue';
+
+// Define las rutas
+const routes = [
+  { path: '/', component: Home },   // Ruta para el componente Home
+  { path: '/about', component: About }  // Ruta para el componente About
+];
+
+// Crea el router
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+// Crea la aplicación Vue y usa el router
+createApp(App).use(router).mount('#app');
+```
+
+### 2. RouterLink
+
+**RouterLink** es un componente que Vue Router proporciona para crear enlaces de navegación en tu aplicación. Funciona de manera similar a una etiqueta HTML `<a>`, pero está optimizado para trabajar con Vue Router, de manera que la navegación es más eficiente y no recarga toda la página.
+
+**Cuándo usarlo:**
+- Cuando necesitas crear un enlace que navega a una ruta específica en una aplicación Vue con Vue Router.
+- Cuando quieres beneficiarte de las características de optimización de Vue Router, como la carga perezosa (lazy loading) de componentes.
+
+**Uso básico de RouterLink:**
+
+El componente `<RouterLink>` se utiliza en el template de tus componentes Vue para crear enlaces de navegación. Aquí hay un ejemplo de cómo usarlo:
+
+```vue
+<template>
+  <div>
+    <h1>My Vue App</h1>
+    <!-- Usar RouterLink para la navegación -->
+    <nav>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/about">About</RouterLink>
+    </nav>
+    
+    <!-- Muestra el componente correspondiente a la ruta actual -->
+    <router-view></router-view>
+  </div>
+</template>
+```
+
+En este ejemplo:
+
+- `<RouterLink to="/">Home</RouterLink>` crea un enlace que lleva al componente `Home` cuando se hace clic.
+- `<RouterLink to="/about">About</RouterLink>` crea un enlace que lleva al componente `About` cuando se hace clic.
+- `<router-view></router-view>` es un contenedor que muestra el componente correspondiente a la ruta actual.
+
+### Ejemplo completo
+
+Un ejemplo completo que incluye la configuración del router y el uso de `<RouterLink>` para la navegación sería así:
+
+#### `main.js`
+
+```javascript
+import { createApp } from 'vue';
+import App from './App.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import Home from './components/Home.vue';
+import About from './components/About.vue';
+
+const routes = [
+  { path: '/', component: Home },
+  { path: '/about', component: About },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+createApp(App).use(router).mount('#app');
+```
+
+#### `App.vue`
+
+```vue
+<template>
+  <div id="app">
+    <nav>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/about">About</RouterLink>
+    </nav>
+    <router-view></router-view>
+  </div>
+</template>
+```
+
+#### `Home.vue`
+
+```vue
+<template>
+  <div>
+    <h2>Home Page</h2>
+    <p>Welcome to the Home page!</p>
+  </div>
+</template>
+```
+
+#### `About.vue`
+
+```vue
+<template>
+  <div>
+    <h2>About Page</h2>
+    <p>This is the About page!</p>
+  </div>
+</template>
+```
+
+### Resumen
+
+- **Vue Router** gestiona la navegación en aplicaciones de una sola página.
+- **RouterLink** crea enlaces de navegación que se integran perfectamente con Vue Router.
+- Se usan juntos para crear aplicaciones Vue con múltiples vistas o componentes, proporcionando una experiencia de usuario fluida.

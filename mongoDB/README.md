@@ -461,3 +461,214 @@ db.movies.find(
     {_id: 0, title: 1, "awards.text": 1}
     )
 ```
+
+## Conexión de MongoDB con PHP
+```php
+<?php
+require 'vendor/autoload.php'; // Para cargar la librería de MongoDB
+
+$client = new MongoDB\Client("mongodb://localhost:27017");
+
+$database = $client->nombre_base_datos;
+$collection = $database->nombre_coleccion;
+
+echo "Conexión exitosa a MongoDB";
+
+// Insertar documento
+$insertOneResult = $collection->insertOne([
+    'nombre' => 'Juan',
+    'edad' => 25
+]);
+
+echo "Se ha insertado el documento con el ID: " . $insertOneResult->getInsertedId();
+?>
+```
+
+## Conexión de MongoDB con JavaScript (Node.js)
+```js
+const { MongoClient } = require('mongodb');
+
+async function main() {
+  const uri = "mongodb://localhost:27017";
+  const client = new MongoClient(uri);
+
+  try {
+    await client.connect();
+    console.log("Conexión exitosa a MongoDB");
+
+    const database = client.db('nombre_base_datos');
+    const collection = database.collection('nombre_coleccion');
+
+    // Insertar documento
+    const result = await collection.insertOne({ nombre: "Juan", edad: 25 });
+    console.log("Documento insertado con el ID:", result.insertedId);
+  } finally {
+    await client.close();
+  }
+}
+
+main().catch(console.error);
+```
+
+## Conexión de MongoDB con Next.js
+```js
+import { MongoClient } from 'mongodb';
+
+export async function getServerSideProps() {
+  const uri = "mongodb://localhost:27017";
+  const client = new MongoClient(uri);
+  await client.connect();
+
+  const db = client.db('nombre_base_datos');
+  const collection = db.collection('nombre_coleccion');
+  const data = await collection.find({}).toArray();
+
+  await client.close();
+
+  return {
+    props: {
+      data: JSON.parse(JSON.stringify(data)) // Para serializar objetos BSON
+    }
+  };
+}
+
+const Page = ({ data }) => (
+  <div>
+    {data.map((item) => (
+      <p key={item._id}>{item.nombre}</p>
+    ))}
+  </div>
+);
+
+export default Page;
+```
+
+## Conexión de MongoDB con Java Sprint Boot
+- Dependencias en ``pom.xml``:
+```java
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+- Configuración en ``application.properties``:
+```java
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port=27017
+spring.data.mongodb.database=nombre_base_datos
+```
+
+- Modelo:
+```java
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "usuarios")
+public class Usuario {
+
+    @Id
+    private String id;
+    private String nombre;
+    private int edad;
+
+    // Getters y Setters
+}
+```
+
+- Repositorio
+```java
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface UsuarioRepository extends MongoRepository<Usuario, String> {
+}
+```
+
+ ## Conexión a MongoDB con Spring Framework (Java)
+ - Dependencias en ``pom.xml``:
+ ```java
+ <dependency>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-mongodb</artifactId>
+    <version>3.2.4</version>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.3.18</version>
+</dependency>
+```
+
+- Configuración en ``applicationContext.xml``:
+ ```java
+ <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- MongoDB Factory -->
+    <bean id="mongoClient" class="com.mongodb.client.MongoClients" factory-method="create">
+        <constructor-arg value="mongodb://localhost:27017"/>
+    </bean>
+
+    <!-- Definir MongoTemplate -->
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongoClient"/>
+        <constructor-arg value="nombre_base_datos"/>
+    </bean>
+
+</beans>
+```
+
+- Entidad (Modelo):
+ ```java
+ import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "usuarios")
+public class Usuario {
+
+    @Id
+    private String id;
+    private String nombre;
+    private int edad;
+
+    // Getters y Setters
+}
+```
+
+- DAO (Data Access Object):
+ ```java
+ import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public class UsuarioDao {
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    public List<Usuario> obtenerUsuarios() {
+        return mongoTemplate.findAll(Usuario.class);
+    }
+
+    public void guardarUsuario(Usuario usuario) {
+        mongoTemplate.save(usuario);
+    }
+}
+```
+
+### Consideraciones:
+- **``Seguridad:``** Nunca conectes directamente desde el frontend a una base de datos. El acceso a las bases de datos debe estar detrás de una API o servidor.
+- **``CORS:``** Asegúrate de que el servidor donde está tu API permita las solicitudes desde tu aplicación frontend.
+- Esta estructura mantiene la conexión con las bases de datos en el servidor y sólo devuelve los resultados al frontend de manera segura.
+- Para MongoDB, Spring Data MongoDB facilita la conexión a la base de datos mediante el uso de ``MongoTemplate``.

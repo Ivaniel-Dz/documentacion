@@ -113,6 +113,10 @@ php artisan lang:add es
 # Generar llaves (keys) para variables de entorno
 php artisan key:generate
 
+# Crear una clase de Servicio para la API en el directorio app/Services/
+php artisan make:directory Services 
+php artisan make:class Services/NameAPIService
+
 # compila activos de la configuración que hayas definido en el archivo
 npm run dev
 
@@ -285,3 +289,78 @@ En este ejemplo:
 - Es diferente de **`RouterLink`** porque está diseñado específicamente para trabajar con Inertia.js y aplicaciones que combinan un backend de servidor con un frontend SPA.
 - Proporciona una experiencia de navegación fluida similar a `RouterLink` pero con capacidades adicionales para integrarse con la lógica del backend del servidor.
 
+## Las opciones principales de ``php artisan migrate``
+Las opciones principales de `php artisan migrate` en Laravel son las siguientes:
+
+### Comandos principales
+
+1. **`php artisan migrate`**  
+   Ejecuta todas las migraciones pendientes para actualizar la base de datos.
+
+2. **`php artisan migrate:rollback`**  
+   Revierta la última "lote" de migraciones ejecutadas, es decir, deshace las migraciones más recientes.
+
+3. **`php artisan migrate:reset`**  
+   Revierta **todas** las migraciones que se hayan ejecutado previamente, es decir, deshace todas las migraciones aplicadas.
+
+4. **`php artisan migrate:refresh`**  
+   Revierte todas las migraciones y luego las vuelve a ejecutar desde cero. Útil para reconstruir la base de datos sin perder los cambios en las migraciones.
+
+5. **`php artisan migrate:fresh`**  
+   Elimina **todas** las tablas de la base de datos y luego ejecuta todas las migraciones desde cero. Útil para crear una base de datos limpia.
+
+6. **`php artisan migrate:status`**  
+   Muestra el estado actual de todas las migraciones, indicando cuáles han sido ejecutadas y cuáles no.
+
+7. **`php artisan migrate:install`**  
+   Crea la tabla de migraciones en la base de datos (normalmente llamada `migrations`), que Laravel usa para registrar las migraciones que han sido ejecutadas.
+
+8. **`php artisan migrate:make`**  
+   Crea un nuevo archivo de migración. Por ejemplo:
+   ```bash
+   php artisan make:migration create_users_table
+   ```
+
+### Opciones adicionales
+
+- **`--force`**  
+  Ejecuta las migraciones sin confirmación, útil cuando necesitas ejecutar migraciones en producción.
+
+  ```bash
+  php artisan migrate --force
+  ```
+
+- **`--step`**  
+  Realiza las migraciones por lotes (batch) de una en una, lo que permite revertirlas una por una con `migrate:rollback`.
+
+  ```bash
+  php artisan migrate --step
+  ```
+
+- **`--path`**  
+  Especifica la ruta donde se encuentran las migraciones que quieres ejecutar. Esto es útil si tienes migraciones ubicadas fuera del directorio predeterminado (`database/migrations`).
+
+  ```bash
+  php artisan migrate --path=/database/migrations/custom
+  ```
+
+- **`--database`**  
+  Especifica qué conexión de base de datos usar para las migraciones.
+
+  ```bash
+  php artisan migrate --database=oracle
+  ```
+
+- **`--seed`**  
+  Ejecución automática de los seeders después de realizar las migraciones.
+
+  ```bash
+  php artisan migrate --seed
+  ```
+
+- **`--pretend`**  
+  Muestra el SQL que se ejecutaría, sin aplicar cambios a la base de datos.
+
+  ```bash
+  php artisan migrate --pretend
+  ```

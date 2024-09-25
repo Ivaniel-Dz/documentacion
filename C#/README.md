@@ -1,5 +1,5 @@
-## C#
-
+## C# (C Sharp)
+>**[Documentación](https://learn.microsoft.com/es-es/dotnet/csharp/tour-of-csharp/)**
 ## Mostrar mensaje por pantalla
 ```cs
 Console.WriteLine("Hola mi primer codigo"+"\n"+"C Shart");
@@ -260,26 +260,291 @@ class Operaciones
 ```
 
 ### Herencia
+> Las hererencias en C# se declaran con ```:``` 
+![preview](./preview/herencia.png)
+
+### Sobrecarga
+> Sobrecarga: creación de varios métodos con el mismo nombre pero con diferentes definiciones o parámetros. También se puede realizar sobrecargas a Constructores
 ```cs
+namespace POO
+{
+    public class Leon : Carnivoro
+    {
+        // Constructor con valor por defecto
+        public Leon() { //Constructor padre
+            if (this.Nombre == null || !this.Nombre.Equals(""))
+            {
+                this.Nombre = "Leon";
+            }
+            Console.WriteLine("Carga de datos");
+        }
+
+        // Constructor con valor por parametro
+        public Leon(string Nombre) : this() //this() permite ejecutar primero el constuctor padre
+        {
+            this.Nombre = Nombre;
+        }
+
+        public string ColorCabello { get; set; }
+
+        private int velocidadDefecto = 4;
+        // Metodo Correr con valor por defecto
+        public void Correr () 
+        {
+            Console.WriteLine(velocidadDefecto+"Km/hr");
+        }
+
+        // Metodo Correr con parametro int
+        public void Correr(int velocidad) {
+            Console.WriteLine("Corriendo a "+velocidad+"Km/hr");
+        }
+
+        // Metodo Correr con parametro string
+        public void Correr(string presa)
+        {
+            Console.WriteLine("Corriendo a cazar: " + presa);
+        }
+    }
+}
 ```
-### Sobrecargas
+
+### Sobrescitura 
+> La sobrescritura es ocultar un método por otro que lo reemplaza, es decir define ese mismo método nuevamente.
 ```cs
+namespace POO
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Leon oLeon = new Leon("Simba");
+            // Mostrar el valor sobrescrito
+            Console.WriteLine(oLeon.GetNombre());
+        }
+    }
+}
 ```
+
+```cs
+namespace POO
+{
+    public class Animal
+    {
+        public string Nombre { get; set; }
+
+        // Sobrescitura
+        public virtual string GetNombre() { 
+            return Nombre;
+        }
+    }
+}
+```
+
+```cs
+namespace POO
+{
+    public class Leon : Carnivoro
+    {
+        // Sobrescitura
+        public override string GetNombre()
+        {
+            return "Soy un león llamado: "+ Nombre;
+        }
+    }
+}
+```
+
 ### Encapsulación
-```cs
-```
+> La encapsulacion esta implementada por modificadores de acceso y estos seran los encargados de definir el rango y la visibilidad de los miembros de la clase, veamos los disponibles:
+
+- **public**: nos permitira exponer todos los miembros que definamos de esta manera, estos pueden ser tanto metodos (funciones) como propiedades (variables) dentro de las clases y las mismas podran ser accedidas desde afuera de la misma.
+
+- **private**: permite denegar el acceso a las propiedades y metodos desde otros objetos o clases, y estos elementos solo pueden ser accedidos por miembros dentro de la misma clase, inclusive una instancia de la misma clase no podria acceder.
+
+- **protected**: es mas utilizado para cuando tenemos clases heredadas, dado que trabaja como public para las clase hijas de la clase base y como private para las clases externas a la misma.
+
+- **internal**: es el predeterminado cuando no informamos ninguno, este nos permite al igual que public exponer todos los metodos y propiedades de la clase dentro del mismo ensamblado (assembly), es decir que todas las clases podran tener acceso siempre y cuando esten dentro del mismo ensamblado.
+
+- **protected internal**: es una mezcla entre el internal y el protected, porque ocultara a los miembros a las clases externas de esta pero si le permitira el acceso a las hijas de la clase base.
+
 ### Propiedades
+> Permiten que una clase exponga una manera pública de obtener y establecer valores, a la vez que se oculta el código de implementación o verificación.
+
+- **``get``**
+- **``set``**
+
+> Permiten **obtener** (``get``) o **establecer** (``set``) el valor de una variable desde fuera de la clase, manteniendo así el encapsulamiento y controlando el acceso a los datos internos de la clase.
+
 ```cs
+namespace POO
+{
+    public class Leon : Carnivoro
+    {
+        private int velocidadDefecto = 4;
+        public int Velocidad
+        {   // Muestra e valor
+            get { return velocidadDefecto; }
+            // Modifica el valor
+            set { 
+                if(value < 0)
+                    value = 1;
+                velocidadDefecto = value; 
+            }
+        }
+    }
+}
 ```
+
 ### Polimorfismo
+>  El polimorfismo está íntimamente relacionado con la ``sobrecarga`` y la ``sobrescritura``.
+
+> **Polimorfismo de Inclusion:** La habilidad para redefinir por completo el método de una superclase en una subclase.
+
+- **Polimorfismo de Inclusion:**
 ```cs
+//CLass Main
+namespace Polimorfismo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Bar oBar = new Bar();
+            Persona oMesero = new Mesero("Carlos");
+            Persona oCantinero = new Cantinero("Hector");
+            Persona oCliente = new Cliente("Maria");
+            oBar.Entrar(oMesero);
+            oBar.Entrar(oCantinero);
+            oBar.Entrar(oCliente);
+        }
+    }
+}
 ```
+```cs
+// CLass Persona
+namespace Polimorfismo
+{
+     class Persona
+    {
+        public string Nombre { get; set; }
+
+        public Persona(string Nombre) { this.Nombre = Nombre; }
+
+        public virtual void Accion() { }
+    }
+}
+```
+```cs
+// Class Bar
+namespace Polimorfismo
+{
+    class Bar
+    {
+        List<Persona> listPersona = new List<Persona>();
+
+        public void Entrar(Persona oPersona)
+        {
+            listPersona.Add(oPersona);
+            oPersona.Accion();
+        }
+    }
+}
+```
+```cs
+// Class Mesero
+namespace Polimorfismo
+{
+    class Mesero : Persona
+    {
+        public Mesero(string Nombre) : base(Nombre) {}
+
+        public override void Accion()
+        {
+            Console.WriteLine("Atiende mesas");
+        }
+
+    }
+}
+```
+```cs
+// Class Cliente
+namespace Polimorfismo
+{
+    internal class Cliente : Persona
+    {
+        public Cliente(string Nombre) : base(Nombre) { }
+
+        public override void Accion()
+        {
+            Console.WriteLine("Tomar bebidas");
+        }
+    }
+}
+```
+```cs
+// Class Persona
+namespace Polimorfismo
+{
+    class Cantinero : Persona
+    {   
+        public Cantinero(string Nombre) : base(Nombre) { }
+
+           public override void Accion()
+        {
+            Console.WriteLine("Realiza bebitas");
+        }
+
+    }
+
+}
+```
+
 ### Constructores
 ```cs
+namespace AbstractasInterfaces
+{
+class Program
+    {
+    static void Main(string[] args)
+    {
+        Persona oPesona1 = new Persona("Ivan", 28);
+        Persona oPesona2 = new Persona("Luis", 29);
+
+        Console.WriteLine(oPesona1.MostrarDatos());
+        Console.WriteLine(oPesona2.MostrarDatos());
+    }
+    
+    }
+}
 ```
+```cs
+namespace AbstractasInterfaces
+{
+    internal class Persona
+    {
+        public string Nombre;
+        public int Edad;
+
+        // Constructor de la clase Persona
+        public Persona(string name, int age) 
+        {
+            Nombre = name;
+            Edad = age;
+        }
+
+        public string MostrarDatos()
+        {
+            return $"Mi nombre es '{Nombre}' tengo {Edad} años.";
+        }
+    }
+}
+```
+
 ### Clases abstractas e interfaces
 ```cs
+
 ```
+![preview](./preview/sobrecarga.png)
 
 
 ## Tipos Avanzados

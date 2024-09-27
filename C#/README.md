@@ -541,38 +541,249 @@ namespace AbstractasInterfaces
 ```
 
 ### Clases abstractas e interfaces
+>Una clase ``abstracta`` te permite compartir código entre clases relacionadas, mientras que una ``interfaz`` te ayuda a definir un contrato que múltiples clases pueden implementar.
 ```cs
+namespace AbstractasInterfaces
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
 
+        }
+
+        public abstract class Sale
+        {
+            public decimal _total;
+
+            // Constructor
+            public Sale(decimal total) => _total = total;
+        }
+
+        interface IInvoice
+        {
+            void Check();
+        }
+
+        interface ICancel
+        {
+            void Cancel();
+        }
+
+        interface ITax
+        {
+            public decimal Total { get; set; }
+        }
+
+        public class SingleSale : Sale, IInvoice, ICancel, ITax
+        {
+            private decimal _iva;
+            public decimal Total 
+            { 
+                get {  return _total + _iva; }
+                set => throw new NotImplementedException();
+            }
+
+            public SingleSale(decimal total) : base(total) { }
+
+            public void Cancel()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Check()
+            {
+                throw new NotImplementedException();
+            }
+        }
+    }
+}
 ```
-![preview](./preview/sobrecarga.png)
-
 
 ## Tipos Avanzados
 ### Enumeraciones (enum)
+> Una enumeración es un tipo de datos que permite definir un conjunto de valores constantes.
+```cs
+enum DiasSemana { Lunes, Martes, Miercoles, Jueves, Viernes, Sabado, Domingo }
+
+DiasSemana dia = DiasSemana.Lunes;
+Console.WriteLine(dia);  // Salida: Lunes
+```
+> Explicación: Definimos una enumeración ``DiasSemana`` con valores predefinidos. Luego, asignamos un valor de la enumeración a la variable ``dia``.
+
 ### Estructuras (struct)
+> Las estructuras (``struct``) son tipos de datos que permiten agrupar variables de diferentes tipos en un solo objeto. A diferencia de las clases, son tipos por valor.
+```cs
+struct Punto
+{
+    public int X;
+    public int Y;
+
+    public Punto(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+}
+
+Punto punto = new Punto(10, 20);
+Console.WriteLine($"Punto: ({punto.X}, {punto.Y})");
+```
+> Explicación: Aquí, ``Punto`` es una estructura que contiene dos campos ``X`` y ``Y``. Creamos una instancia de ``Punto`` con valores iniciales.
+
 ### Delegados y eventos
+> Un delegado es un puntero a una función, y los eventos permiten notificar cuando sucede una acción específica.
+```cs
+public delegate void Notificar(string mensaje);
+public class Publicador
+{
+    public event Notificar EventoNotificacion;
+
+    public void EjecutarEvento()
+    {
+        EventoNotificacion?.Invoke("Evento activado!");
+    }
+}
+
+Publicador pub = new Publicador();
+pub.EventoNotificacion += msg => Console.WriteLine(msg);
+pub.EjecutarEvento();  // Salida: Evento activado!
+```
+> Explicación: Definimos un delegado ``Notificar`` y un evento ``EventoNotificacion``. Luego, asociamos un método al evento y lo invocamos.
+
 ### Expresiones lambda
+> Las expresiones lambda son funciones anónimas que se utilizan comúnmente con delegados y LINQ.
+```cs
+Func<int, int> cuadrado = x => x * x;
+Console.WriteLine(cuadrado(5));  // Salida: 25
+```
+Explicación: Usamos una expresión lambda ``x => x * x`` que toma un valor ``x`` y devuelve su cuadrado. La lambda se asigna a un delegado ``Func``.
 
 ## Manejo de Excepciones
 ### Try, catch, finally
+> El bloque ``try-catch-finally`` permite manejar excepciones.
+```cs
+try
+{
+    int divisor = 0;
+    int resultado = 10 / divisor;
+}
+catch (Exception ex)
+{
+    Console.WriteLine("No se puede dividir entre cero.");
+}
+finally
+{
+    Console.WriteLine("Bloque finally ejecutado.");
+}
+```
+> Explicación: Intentamos dividir por cero, lo cual lanza una excepción ``Exception``, la cual es capturada en el bloque ``catch``. El bloque ``finally`` se ejecuta siempre, independientemente de si ocurrió una excepción.
+
 ### Throw y creación de excepciones personalizadas
+> Podemos lanzar (``throw``) excepciones manualmente y también crear nuestras propias excepciones.
+```cs
+public class MiExcepcion : Exception
+{
+    public MiExcepcion(string mensaje) : base(mensaje) { }
+}
+
+public void LanzarExcepcion()
+{
+    throw new MiExcepcion("Esta es una excepción personalizada.");
+}
+
+try
+{
+    LanzarExcepcion();
+}
+catch (MiExcepcion ex)
+{
+    Console.WriteLine(ex.Message);  // Salida: Esta es una excepción personalizada.
+}
+```
+> Explicación: Creamos una excepción personalizada ``MiExcepcion`` heredando de ``Exception``. Luego, lanzamos y capturamos esta excepción con ``throw``.
 
 ## Colecciones y Genéricos
 ### Arrays
+> Un array es una colección de elementos del mismo tipo almacenados en ubicaciones de memoria contiguas.
+```cs
+int[] numeros = { 1, 2, 3, 4, 5 };
+
+for (int i = 0; i < numeros.Length; i++)
+{
+    Console.WriteLine(numeros[i]);
+}
+```
+
 ### Listas y Diccionarios
+> Las listas (``List<T>``) y diccionarios (``Dictionary<TKey, TValue>``) son colecciones dinámicas.
+```cs
+List<int> lista = new List<int> { 1, 2, 3 };
+lista.Add(4);
+Console.WriteLine(lista[3]);  // Salida: 4
+
+Dictionary<string, int> diccionario = new Dictionary<string, int>();
+diccionario["edad"] = 25;
+Console.WriteLine(diccionario["edad"]);  // Salida: 25
+```
+Explicación: ``List<T>`` es una lista de elementos que permite agregar más elementos dinámicamente. ``Dictionary<TKey, TValue>`` almacena pares clave-valor.
+
 ### Pilas (Stack) y colas (Queue)
+> Las pilas ``(Stack<T>)`` y colas ``(Queue<T>)`` son colecciones que siguen las estructuras LIFO (último en entrar, primero en salir) y FIFO (primero en entrar, primero en salir), respectivamente.
+```cs
+Stack<int> pila = new Stack<int>();
+pila.Push(1);
+pila.Push(2);
+Console.WriteLine(pila.Pop());  // Salida: 2
+
+Queue<int> cola = new Queue<int>();
+cola.Enqueue(1);
+cola.Enqueue(2);
+Console.WriteLine(cola.Dequeue());  // Salida: 1
+```
+> Explicación: Stack<T> permite agregar y quitar elementos en orden LIFO, mientras que Queue<T> sigue el principio FIFO.
+
 ### Genéricos (List<T>, Dictionary<T, T>)
+> Los genéricos permiten crear clases y métodos que operan en cualquier tipo de dato.
+```cs
+List<string> nombres = new List<string> { "Ana", "Luis" };
+Dictionary<int, string> empleados = new Dictionary<int, string> { { 1, "Carlos" }, { 2, "Marta" } };
+```
+> Explicación: List<T> y Dictionary<T, T> son ejemplos de colecciones genéricas, donde T representa el tipo de dato que contendrán.
 
 ## LINQ (Language-Integrated Query)
 ### Sintaxis básica de LINQ
+```cs
+```
+
 ### Consultas de selección, filtrado y agrupación
+```cs
+```
+
 ### Uso de métodos como `Select()`, `Where()`, `GroupBy()`
+```cs
+```
 
 ## Manejo de Archivos
 ### Lectura y escritura en archivos
+```cs
+```
+
 ### Streams (FileStream, StreamReader, StreamWriter)
+```cs
+```
 
 ## Conceptos Avanzados
 ### Tareas asíncronas (async/await)
+```cs
+```
+
 ### Expresiones regulares
+```cs
+```
+
 ### Serialización de objetos
+```cs
+```
+
+![preview](./preview/sobrecarga.png)

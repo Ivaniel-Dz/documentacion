@@ -4,6 +4,11 @@
 ```cs
 Console.WriteLine("Hola mi primer codigo"+"\n"+"C Shart");
 ```
+## Ingresar valor por teclado
+```cs
+Console.WriteLine("Ingrese el primer numero:");
+x = int.Parse(Console.ReadLine());
+```
 
 ## Tipos de Datos y Operadores
 ### Tipos de datos básicos
@@ -26,6 +31,20 @@ Console.WriteLine(texto + c); // + concatena los variables y también sirve para
 > **Variables:** Las variables actúan como contenedores de datos que pueden cambiar durante la ejecución de un programa.
 
 > **Constantes:** Las constantes son valores fijos que no cambian una vez definido y se utilizan para valores que no deben modificarse durante la ejecución del programa. _Ejemplo: Números de Dias de una semana, siempre sera 7._
+
+### var
+> ``var`` es una palabra clave en C# que permite declarar variables de manera implícita. El tipo de la variable se infiere del valor que se le asigna.
+```cs
+var numero = 10;  // El compilador infiere que 'numero' es de tipo int
+var texto = "Hola";  // El compilador infiere que 'texto' es de tipo string
+```
+**Cuándo utilizar ``var``:**
+- Cuando el tipo es obvio a partir del contexto (como en el caso de literales o expresiones sencillas).
+- En consultas LINQ u otras situaciones en las que el tipo exacto es complejo o largo de escribir.
+
+**No utilizar ``var``:**
+- Cuando usar var hace que el código sea menos claro o el tipo no sea inmediatamente obvio.
+
 
 ### Operadores aritméticos, lógicos y relacionales
 - Operadores aritméticos:
@@ -66,6 +85,52 @@ a-=2; // Decrementa en 2
     - ``==`` (Igual que)
     - ``!=`` (Distinto que)
 
+### Métodos de string
+> La clase ``string`` en C# ofrece diversos métodos para manipular y trabajar con cadenas de texto.
+```cs
+string frase = "Hola Mundo";
+
+// Obtener longitud
+int longitud = frase.Length;  // 10
+
+// Convertir a mayúsculas
+string mayusculas = frase.ToUpper();  // "HOLA MUNDO"
+
+// Reemplazar texto
+string reemplazo = frase.Replace("Mundo", "C#");  // "Hola C#"
+
+// Dividir cadena
+string[] palabras = frase.Split(' ');  // ["Hola", "Mundo"]
+
+// Substring
+string subcadena = frase.Substring(5, 5);  // "Mundo"
+```
+**Métodos comunes:**
+- ``Length``: Devuelve la longitud de la cadena.
+- ``ToUpper()`` y ``ToLower()``: Convierte la cadena a mayúsculas o minúsculas.
+- ``Replace()``: Reemplaza una parte de la cadena con otra.
+- ``Split()``: Divide la cadena en un array según un delimitador.
+- ``Substring()``: Extrae una subcadena.
+
+## Casting
+> El casting en C# se refiere a convertir un tipo de dato en otro. Puede ser explícito o implícito.
+- Casting implícito: Sucede automáticamente cuando no hay pérdida de datos.
+```cs
+int entero = 10;
+double doble = entero;  // Conversión implícita de int a double
+```
+
+- Casting explícito: Se utiliza cuando puede haber pérdida de datos o la conversión no es segura.
+```cs
+double numero = 9.8;
+int entero = (int)numero;  // Conversión explícita de double a int, pierde los decimales (entero será 9)
+```
+
+- También está el casting de referencia, donde se convierte un tipo base a un tipo derivado:
+```cs
+object obj = "Hola Mundo";
+string str = (string)obj;  // Casting explícito
+```
 ## Estructuras de Control
 ### Condicionales (if, else, else if)
 ```cs
@@ -396,7 +461,13 @@ namespace POO
 ```
 
 ### Polimorfismo
+> El polimorfismo permite que las clases derivadas puedan sobrescribir los métodos de la clase base, permitiendo diferentes comportamientos para el mismo método.
+
 >  El polimorfismo está íntimamente relacionado con la ``sobrecarga`` y la ``sobrescritura``.
+
+**Hay dos tipos de polimorfismo:**
+- Polimorfismo en tiempo de compilación (sobrecarga de métodos).
+- Polimorfismo en tiempo de ejecución (sobrescritura de métodos).
 
 > **Polimorfismo de Inclusion:** La habilidad para redefinir por completo el método de una superclase en una subclase.
 
@@ -498,6 +569,40 @@ namespace Polimorfismo
 
 }
 ```
+
+Ejemplo de polimorfismo en tiempo de ejecución:
+```cs
+public class Animal
+{
+    public virtual void HacerSonido()
+    {
+        Console.WriteLine("Sonido de animal");
+    }
+}
+
+public class Perro : Animal
+{
+    public override void HacerSonido()
+    {
+        Console.WriteLine("Ladrido");
+    }
+}
+
+public class Gato : Animal
+{
+    public override void HacerSonido()
+    {
+        Console.WriteLine("Maullido");
+    }
+}
+
+Animal animal = new Perro();
+animal.HacerSonido();  // Salida: Ladrido
+
+animal = new Gato();
+animal.HacerSonido();  // Salida: Maullido
+```
+> **Explicación:** La clase Animal tiene un método HacerSonido(), y las clases Perro y Gato lo sobrescriben para dar un comportamiento específico. Aunque animal es del tipo Animal, en tiempo de ejecución se invoca el método sobrescrito de la clase derivada correspondiente.
 
 ### Constructores
 ```cs
@@ -657,7 +762,7 @@ pub.EjecutarEvento();  // Salida: Evento activado!
 Func<int, int> cuadrado = x => x * x;
 Console.WriteLine(cuadrado(5));  // Salida: 25
 ```
-Explicación: Usamos una expresión lambda ``x => x * x`` que toma un valor ``x`` y devuelve su cuadrado. La lambda se asigna a un delegado ``Func``.
+> Explicación: Usamos una expresión lambda ``x => x * x`` que toma un valor ``x`` y devuelve su cuadrado. La lambda se asigna a un delegado ``Func``.
 
 ## Manejo de Excepciones
 ### Try, catch, finally
@@ -715,6 +820,41 @@ for (int i = 0; i < numeros.Length; i++)
 }
 ```
 
+### Métodos de Arrays
+> Los arrays en C# tienen varios métodos útiles para manipular sus elementos.
+```cs
+int[] numeros = { 5, 2, 9, 1, 3 };
+
+// Ordenar
+Array.Sort(numeros);  // [1, 2, 3, 5, 9]
+
+// Buscar un elemento
+int indice = Array.IndexOf(numeros, 3);  // Indice del valor 3 es 2
+
+// Invertir el array
+Array.Reverse(numeros);  // [9, 5, 3, 2, 1]
+```
+
+**Métodos comunes:**
+- **``Array.Sort()``:** Ordena los elementos de un array.
+- **``Array.Reverse()``:** Invierte el orden de los elementos.
+- **``Array.IndexOf()``:** Devuelve el índice de un elemento.
+- **``Array.Copy()``:** Copia un rango de elementos de un array a otro.
+
+### Operadores de Propagación
+```cs
+string[] paises1 = ["Panama", "Colombia"];
+string[] paises2 = ["Peru", "Chile"];
+string[] paises3 = ["España", "Italia"];
+
+string[] country = [.. paises1, ..paises2, ..paises3];
+
+foreach (var pais in country)
+{
+    Console.WriteLine(pais);
+}
+```
+
 ### Listas y Diccionarios
 > Las listas (``List<T>``) y diccionarios (``Dictionary<TKey, TValue>``) son colecciones dinámicas.
 ```cs
@@ -726,7 +866,7 @@ Dictionary<string, int> diccionario = new Dictionary<string, int>();
 diccionario["edad"] = 25;
 Console.WriteLine(diccionario["edad"]);  // Salida: 25
 ```
-Explicación: ``List<T>`` es una lista de elementos que permite agregar más elementos dinámicamente. ``Dictionary<TKey, TValue>`` almacena pares clave-valor.
+> Explicación: ``List<T>`` es una lista de elementos que permite agregar más elementos dinámicamente. ``Dictionary<TKey, TValue>`` almacena pares clave-valor.
 
 ### Pilas (Stack) y colas (Queue)
 > Las pilas ``(Stack<T>)`` y colas ``(Queue<T>)`` son colecciones que siguen las estructuras LIFO (último en entrar, primero en salir) y FIFO (primero en entrar, primero en salir), respectivamente.
@@ -741,7 +881,7 @@ cola.Enqueue(1);
 cola.Enqueue(2);
 Console.WriteLine(cola.Dequeue());  // Salida: 1
 ```
-> Explicación: Stack<T> permite agregar y quitar elementos en orden LIFO, mientras que Queue<T> sigue el principio FIFO.
+> Explicación: ``Stack<T>`` permite agregar y quitar elementos en orden LIFO, mientras que ``Queue<T> ``sigue el principio FIFO.
 
 ### Genéricos (List<T>, Dictionary<T, T>)
 > Los genéricos permiten crear clases y métodos que operan en cualquier tipo de dato.
@@ -749,41 +889,130 @@ Console.WriteLine(cola.Dequeue());  // Salida: 1
 List<string> nombres = new List<string> { "Ana", "Luis" };
 Dictionary<int, string> empleados = new Dictionary<int, string> { { 1, "Carlos" }, { 2, "Marta" } };
 ```
-> Explicación: List<T> y Dictionary<T, T> son ejemplos de colecciones genéricas, donde T representa el tipo de dato que contendrán.
+> Explicación: ``List<T>`` y ``Dictionary<T, T>`` son ejemplos de colecciones genéricas, donde ``T`` representa el tipo de dato que contendrán.
 
 ## LINQ (Language-Integrated Query)
+> LINQ permite realizar consultas sobre colecciones.
 ### Sintaxis básica de LINQ
 ```cs
+int[] numeros = { 1, 2, 3, 4, 5 };
+var pares = from n in numeros
+            where n % 2 == 0
+            select n;
+
+foreach (var numero in pares)
+{
+    Console.WriteLine(numero);  // Salida: 2, 4
+}
 ```
+> Explicación: Usamos LINQ para seleccionar números pares de un array.
 
 ### Consultas de selección, filtrado y agrupación
 ```cs
+string[] frutas = { "Manzana", "Banana", "Cereza", "Mango" };
+
+var filtro = frutas.Where(f => f.StartsWith("M")).Select(f => f);
+
+foreach (var fruta in filtro)
+{
+    Console.WriteLine(fruta);  // Salida: Manzana, Mango
+}
 ```
+> Explicación: Filtramos las frutas que comienzan con la letra "M" utilizando ``Where()`` y ``Select()``.
 
 ### Uso de métodos como `Select()`, `Where()`, `GroupBy()`
 ```cs
+var personas = new[]
+{
+    new { Nombre = "Juan", Edad = 20 },
+    new { Nombre = "Ana", Edad = 25 },
+    new { Nombre = "Luis", Edad = 20 }
+};
+
+var agrupadas = personas.GroupBy(p => p.Edad);
+
+foreach (var grupo in agrupadas)
+{
+    Console.WriteLine($"Edad: {grupo.Key}");
+    foreach (var persona in grupo)
+    {
+        Console.WriteLine($"Nombre: {persona.Nombre}");
+    }
+}
 ```
+> Explicación: Agrupamos las personas por edad utilizando ``GroupBy()``.
 
 ## Manejo de Archivos
 ### Lectura y escritura en archivos
 ```cs
+// Escritura
+File.WriteAllText("archivo.txt", "Hola Mundo");
+
+// Lectura
+string contenido = File.ReadAllText("archivo.txt");
+Console.WriteLine(contenido);  // Salida: Hola Mundo
 ```
+> Explicación: Utilizamos F``ile.WriteAllText()`` para escribir en un archivo y ``File.ReadAllText()`` para leer su contenido.
 
 ### Streams (FileStream, StreamReader, StreamWriter)
 ```cs
+// Escritura usando StreamWriter
+using (StreamWriter sw = new StreamWriter("archivo.txt"))
+{
+    sw.WriteLine("Texto desde StreamWriter");
+}
+
+// Lectura usando StreamReader
+using (StreamReader sr = new StreamReader("archivo.txt"))
+{
+    Console.WriteLine(sr.ReadToEnd());  // Salida: Texto desde StreamWriter
+}
 ```
+> Explicación: Usamos ``StreamWriter`` para escribir y ``StreamReader`` para leer archivos con streams.
 
 ## Conceptos Avanzados
 ### Tareas asíncronas (async/await)
 ```cs
+public async Task<int> ObtenerDatosAsync()
+{
+    await Task.Delay(1000);  // Simula una operación asíncrona
+    return 42;
+}
+
+async Task Main()
+{
+    int resultado = await ObtenerDatosAsync();
+    Console.WriteLine(resultado);  // Salida: 42
+}
 ```
+> Explicación: Usamos ``async`` y ``await`` para realizar operaciones asíncronas, en este caso, simulando una espera de 1 segundo.
 
 ### Expresiones regulares
 ```cs
+string texto = "Correo: ejemplo@mail.com";
+string patron = @"\w+@\w+\.\w+";
+
+bool esValido = Regex.IsMatch(texto, patron);
+Console.WriteLine(esValido);  // Salida: True
 ```
+> Explicación: Utilizamos expresiones regulares para verificar si un texto contiene un correo electrónico válido.
 
 ### Serialización de objetos
 ```cs
-```
+[Serializable]
+public class Persona
+{
+    public string Nombre { get; set; }
+    public int Edad { get; set; }
+}
 
-![preview](./preview/sobrecarga.png)
+// Serialización
+Persona persona = new Persona { Nombre = "Juan", Edad = 30 };
+string json = JsonSerializer.Serialize(persona);
+Console.WriteLine(json);  // Salida: {"Nombre":"Juan","Edad":30}
+
+// Deserialización
+Persona deserializada = JsonSerializer.Deserialize<Persona>(json);
+Console.WriteLine(deserializada.Nombre);  // Salida: Juan
+```
+> Explicación: Usamos la clase ``JsonSerializer`` para serializar y deserializar objetos a/desde formato JSON.

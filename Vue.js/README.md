@@ -1,4 +1,4 @@
-# Documentación de Vue 3
+# Vue.js 3
 
 <p align="center">
 <img src="https://mochikit.com/wp-content/uploads/2019/01/vue-js-logo.png" width="400"/>

@@ -60,6 +60,13 @@ Los componentes son bloques fundamentales en Angular. Representan una parte de l
 - **template**: Define el HTML del componente.
 - **styleUrls**: Array con las rutas de los archivos CSS asociados.
 
+### Estructura de los Componentes
+- Exportar componentes:
+![preview](./img/exportacion.png)
+
+- Configuración entre componentes:
+![preview](./img/config-components.png)
+
 ## Interfaces en Angular
 Las interfaces en TypeScript definen la estructura de un objeto, asegurando un tipo de dato específico en Angular.
 

@@ -1,4 +1,4 @@
-# Documentación de Tailwind CSS
+# Tailwind CSS
 
 ## Instalación y Configuración en CLI v3.4.1
 **1. Instalar tailwind en el proyecto**

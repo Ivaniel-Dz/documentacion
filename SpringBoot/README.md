@@ -17,10 +17,27 @@ Spring Boot permite desarrollar aplicaciones bajo diferentes tipos de arquitectu
 - **Reactiva**: Basada en eventos y asincronismo para mejorar el rendimiento.
 
 ## Spring MVC
-Spring MVC es un módulo de Spring que facilita el desarrollo de aplicaciones web bajo el patrón Modelo-Vista-Controlador (MVC):
-- **Modelo**: Representa los datos y la lógica de negocio.
-- **Vista**: Interfaz gráfica o representación de los datos.
-- **Controlador**: Gestiona las solicitudes y respuestas entre el modelo y la vista.
+ MVC es un patrón de diseño que contiene tres componentes principales:
+ - **Modelo (Model)**:Gestiona los datos de la aplicación y la lógica de negocio.
+ - **Vista (View)**:Encargada de presentar los datos al usuario.
+ - **Controlador (Controller)**:Procesa las solicitudes del usuario, interactúa con el modelo y selecciona la vista adecuada para renderizar.
+ * El objetivo de MVC es facilitar el mantenimiento, la escalabilidad y la reutilización del código.
+
+### Arquitectura de Spring MVC
+ - DispatcherServlet
+ - Controladores
+ - Modelo
+ - Vista
+ - View Resolve
+ - Handler Mapping
+
+ ### Flujo de trabajo en Spring MVC
+ - El cliente envía una solicitud
+ - DispatcherServlet recibe la solicitud
+ - El controlador procesa la solicitud
+ - El controlador selecciona una vista
+ - El View Resolver localiza la vista
+ - Se genera una respuesta
 
 ## Service 
 Un **Service** en Spring Boot es una capa de la aplicación que contiene la lógica de negocio. Se anota con `@Service` y se utiliza para desacoplar la lógica de la capa de controladores.

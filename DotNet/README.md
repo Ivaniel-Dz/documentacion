@@ -2,7 +2,7 @@ Aquí te presento la documentación actualizada, que ahora incluye los nuevos te
 
 ---
 
-# **Documentación Completa de .NET**
+# **C# .NET**
 
 ## **1. Introducción a .NET**
 

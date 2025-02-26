@@ -20,6 +20,7 @@ ng generate pipe currencyFormat  # Crear un pipe personalizado
 ng generate interface user    # Crear una interfaz
 ng generate class models/user # Crear una clase
 ng generate enum userRoles    # Crear un enum
+ng g @angular/core:control-flow # actualiza las directivas ej: *ngFor a @For
 ```
 
 ### **Comandos de ejecución**
@@ -50,6 +51,115 @@ ng version                   # Mostrar la versión de Angular CLI
 - **Routing**: Angular utiliza un sistema de enrutamiento para gestionar la navegación entre vistas o componentes.
 - **RxJS**: Se usa para manejar la programación reactiva, facilitando la gestión de flujos de datos asíncronos.
 
+## Estructura de Carpeta de un Proyecto
+```bash
+my-angular-project/
+|-- public/
+|   |-- icons/
+|   |-- images/
+|   |-- favicon.ico
+|-- src/
+|   |-- app/
+|   |   |-- auth/
+|   |   |-- components/
+|   |   |-- constants/
+|   |   |-- pages/
+|   |   |-- dashboard/
+|   |   |-- interfaces/
+|   |   |-- layouts/
+|   |   |-- services/
+|   |   |-- models/
+|   |   |-- shared/
+|   |   |   |-- my-shared-component/
+|   |   |   |-- my-shared-service.service.ts
+|   |   |-- app.component.css
+|   |   |-- app.component.html
+|   |   |-- app.component.ts
+|   |   |-- app.config.ts
+|   |   |-- app.routes.ts
+|   |-- assets/
+|   |   |-- images/
+|   |   |-- styles/
+|   |-- environments/
+|   |-- index.html
+|   |-- main.ts
+|   |-- styles.css
+|-- angular.json
+|-- package.json
+|-- README.md
+|-- tsconfig.json
+|-- tsconfig.app.json
+|-- tsconfig.spec.json
+```
+
+### Descripción de Carpetas
+* **`public/`**:
+    * Contiene archivos estáticos que no son procesados por Webpack.
+    * **`icons/`**: Iconos del sitio web (por ejemplo, archivos `.ico`, `.png`, `.svg`).
+    * **`images/`**: Imágenes estáticas del sitio web.
+    * **`favicon.ico`**: El icono de la pestaña del navegador.
+
+* **`src/`**:
+    * Contiene el código fuente de la aplicación Angular.
+
+    * **`app/`**:
+        * El módulo principal de la aplicación.
+        * **`auth/`**: Componentes y servicios relacionados con la autenticación (login, registro, etc.).
+        * **`components/`**: Componentes reutilizables de la aplicación.
+        * **`constants/`**: Archivos con valores constantes utilizados en la aplicación (por ejemplo, URLs de API).
+        * **`pages/`**: Componentes que representan las páginas principales de la aplicación.
+        * **`dashboard/`**: Componentes y servicios relacionados con el panel de control de la aplicación.
+        * **`interfaces/`**: Definiciones de interfaces TypeScript para tipos de datos.
+        * **`layouts/`**: Componentes que definen la estructura general de las páginas (por ejemplo, encabezado, pie de página, barra lateral).
+        * **`services/`**: Servicios Angular para la lógica de negocio y la comunicación con el servidor.
+        * **`models/`**: Definiciones de clases de modelo para representar datos.
+        * **`shared/`**: Componentes, servicios y módulos reutilizables en toda la aplicación.
+            * **`my-shared-component/`**: Un componente compartido específico.
+            * **`my-shared-service.service.ts`**: Un servicio compartido específico.
+        * **`app.component.css`**: Estilos CSS específicos para el componente raíz de la aplicación.
+        * **`app.component.html`**: La plantilla HTML del componente raíz de la aplicación.
+        * **`app.component.ts`**: La clase TypeScript del componente raíz de la aplicación.
+        * **`app.config.ts`**: Archivo de configuración de la aplicación.
+        * **`app.routes.ts`**: Definiciones de las rutas de la aplicación.
+
+    * **`assets/`**:
+        * Recursos estáticos de la aplicación (imágenes, estilos, etc.).
+        * **`images/`**: Imágenes utilizadas dentro de la aplicación.
+        * **`styles/`**: Archivos de estilos CSS o SCSS.
+
+    * **`environments/`**:
+        * Configuraciones específicas para diferentes entornos (desarrollo, producción, etc.).
+
+    * **`index.html`**:
+        * La página HTML principal de la aplicación.
+
+    * **`main.ts`**:
+        * El punto de entrada principal de la aplicación Angular.
+
+    * **`styles.css`**:
+        * Estilos CSS globales de la aplicación.
+
+* **Archivos de Configuración y Otros:**
+
+    * **`angular.json`**:
+        * Archivo de configuración de Angular CLI.
+
+    * **`package.json`**:
+        * Archivo de configuración de npm (dependencias, scripts, etc.).
+
+    * **`README.md`**:
+        * Documentación del proyecto.
+
+    * **`tsconfig.json`**:
+        * Archivo de configuración de TypeScript para todo el proyecto.
+
+    * **`tsconfig.app.json`**:
+        * Archivo de configuración de TypeScript específico para la aplicación.
+
+    * **`tsconfig.spec.json`**:
+        * Archivo de configuración de TypeScript específico para las pruebas unitarias.
+
+
 ## Componentes en Angular
 Los componentes son bloques fundamentales en Angular. Representan una parte de la interfaz de usuario y tienen una estructura compuesta por HTML, CSS y TypeScript.
 
@@ -61,11 +171,20 @@ Los componentes son bloques fundamentales en Angular. Representan una parte de l
 - **styleUrls**: Array con las rutas de los archivos CSS asociados.
 
 ### Estructura de los Componentes
-- Exportar componentes:
-![preview](./img/exportacion.png)
+![preview](./img/template-1.jpg)
+![preview](./img/template-2.jpg)
+![preview](./img/template-3.jpg)
+![preview](./img/template-4.jpg)
 
-- Configuración entre componentes:
-![preview](./img/config-components.png)
+- **Esquema de Angular:**
+![preview](./img/esquema.png)
+
+- **Configuración y Exportación entre componentes:**
+![preview](./img/export-config.png)
+
+## Notas Importantes
+> .[!NOTE].
+> la dependencia ``CommonModule``, solo se declara si se usa directivas que tenga iniciales ``ng`` en el html.
 
 ## Interfaces en Angular
 Las interfaces en TypeScript definen la estructura de un objeto, asegurando un tipo de dato específico en Angular.
@@ -418,3 +537,247 @@ export class DataService {
   }
 }
 ```
+
+## Integración de Angular con framework de Backend
+### Spring Boot
+> En el caso de Spring Boot y Angular, típicamente se crean como proyectos separados. Spring Boot es una herramienta de backend en Java, mientras que Angular es un framework de frontend en JavaScript. Esto se debe a que, aunque ambos son complementarios, sus configuraciones, dependencias y entornos de desarrollo son diferentes.
+
+- Una estructura común sería:
+```bash
+/mi-proyecto
+  /backend (Spring Boot)
+  /frontend (Angular)
+```
+De esta manera, puedes trabajar en ambos proyectos simultáneamente, pero cada uno mantiene su autonomía y configuración específica. Luego, podrías usar herramientas como Docker para administrar tus entornos y simplificar el despliegue.
+
+### .NET
+> Integrar .NET y Angular es una combinación poderosa para construir aplicaciones web completas. .NET, con su backend robusto, y Angular, con su frontend dinámico, trabajan muy bien juntos. La clave es mantener cada parte separada pero interconectada mediante servicios RESTful API. Aquí te dejo una estructura típica de un proyecto .NET y Angular:
+
+- Una estructura común sería:
+```bash
+/mi-proyecto
+  /backend-dotnet (Proyecto .NET)
+  /frontend-angular (Proyecto Angular)
+```
+### Laravel
+> Laravel y Angular juntos forman una gran combinación para construir aplicaciones web robustas y dinámicas. Laravel se encarga del backend, proporcionando una API RESTful, mientras que Angular se encarga del frontend, ofreciendo una interfaz de usuario interactiva. Aquí tienes una guía para integrar ambos:
+
+Una manera de organizarlos sería la siguiente:
+```bash
+/mi-proyecto
+  /backend-laravel (Proyecto Laravel)
+  /frontend-angular (Proyecto Angular)
+```
+
+## Métodos o Caracterices mas usadas
+
+### **ngOnInit**
+**Explicación**:  
+`ngOnInit` es un método del ciclo de vida de Angular que se ejecuta después de que el componente ha sido inicializado y sus propiedades han sido vinculadas. Es el lugar ideal para realizar tareas de inicialización, como llamadas a APIs o configuración de datos.
+
+**Ejemplo**:
+```typescript
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `<h1>Hola, {{ nombre }}</h1>`
+})
+export class AppComponent implements OnInit {
+  nombre: string = '';
+
+  ngOnInit() {
+    this.nombre = 'Mundo';
+  }
+}
+```
+
+---
+
+### **ngOnDestroy**
+**Explicación**:  
+`ngOnDestroy` es otro método del ciclo de vida que se ejecuta justo antes de que el componente sea destruido. Es útil para liberar recursos, como suscripciones a observables o limpieza de temporizadores.
+
+**Ejemplo**:
+```typescript
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription, interval } from 'rxjs';
+
+@Component({
+  selector: 'app-timer',
+  template: `<p>{{ contador }}</p>`
+})
+export class TimerComponent implements OnDestroy {
+  contador: number = 0;
+  private subscription: Subscription;
+
+  constructor() {
+    this.subscription = interval(1000).subscribe(() => this.contador++);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe(); // Limpia la suscripción
+  }
+}
+```
+
+---
+
+### **@defer**
+**Explicación**:  
+`@defer` es una característica de Angular 19 que permite cargar componentes, directivas o pipes de manera diferida (lazy loading). Esto mejora el rendimiento al cargar solo lo necesario cuando se requiere.
+
+**Ejemplo**:
+```html
+<button (click)="mostrar = true">Mostrar Componente</button>
+
+@defer (when mostrar) {
+  <app-lazy-component />
+}
+```
+
+---
+
+### **@placeholder**
+**Explicación**:  
+`@placeholder` es una directiva que se usa junto con `@defer` para mostrar un contenido temporal mientras se carga el componente diferido.
+
+**Ejemplo**:
+```html
+@defer (when mostrar) {
+  <app-lazy-component />
+} @placeholder {
+  <p>Cargando...</p>
+}
+```
+
+---
+
+### **@loading**
+**Explicación**:  
+`@loading` es otra directiva que se usa con `@defer` para mostrar un contenido mientras se carga el componente diferido. A diferencia de `@placeholder`, `@loading` se muestra durante el proceso de carga.
+
+**Ejemplo**:
+```html
+@defer (when mostrar) {
+  <app-lazy-component />
+} @loading {
+  <p>Espere, cargando...</p>
+}
+```
+
+---
+
+### **inject**
+**Explicación**:  
+`inject` es una función que permite inyectar dependencias en servicios, componentes o directivas sin necesidad de usar el constructor. Es una alternativa más moderna y flexible.
+
+**Ejemplo**:
+```typescript
+import { inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+export class DataService {
+  private http = inject(HttpClient);
+
+  getData() {
+    return this.http.get('https://api.example.com/data');
+  }
+}
+```
+
+---
+
+### **signal**
+**Explicación**:  
+`signal` es una característica de Angular 19 que permite crear señales reactivas para manejar el estado de la aplicación de manera eficiente. Las señales notifican automáticamente a los componentes cuando cambian.
+
+**Ejemplo**:
+```typescript
+import { signal } from '@angular/core';
+
+@Component({
+  selector: 'app-counter',
+  template: `<p>{{ contador() }}</p>`
+})
+export class CounterComponent {
+  contador = signal(0);
+
+  incrementar() {
+    this.contador.set(this.contador() + 1);
+  }
+}
+```
+
+---
+
+### 8. **Etiqueta `<dialog>`**
+**Explicación**:  
+La etiqueta `<dialog>` es un elemento HTML nativo que permite crear ventanas modales. Angular puede integrarse con esta etiqueta para manejar diálogos de manera eficiente.
+
+**Ejemplo**:
+```html
+<dialog #miDialog>
+  <p>Este es un diálogo.</p>
+  <button (click)="miDialog.close()">Cerrar</button>
+</dialog>
+
+<button (click)="miDialog.showModal()">Abrir Diálogo</button>
+```
+
+---
+
+### **subscribe**
+`subscribe` es un método que se usa para "escuchar" y manejar los valores emitidos por un **observable** (un flujo de datos asíncrono). Sin `subscribe`, el observable no se ejecuta.
+
+---
+
+### **Ejemplo:**
+
+Imagina que tienes un servicio que hace una solicitud HTTP para obtener datos:
+
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DataService {
+  constructor(private http: HttpClient) {}
+
+  getData() {
+    return this.http.get('https://api.example.com/data');
+  }
+}
+```
+
+En tu componente, te suscribes al observable para obtener los datos:
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { DataService } from './data.service';
+
+@Component({
+  selector: 'app-root',
+  template: `<p>{{ datos | json }}</p>`,
+})
+export class AppComponent implements OnInit {
+  datos: any;
+
+  constructor(private dataService: DataService) {}
+
+  ngOnInit() {
+    this.dataService.getData().subscribe((response) => {
+      this.datos = response; // Aquí manejas los datos recibidos
+    });
+  }
+}
+```
+
+---
+
+### **¿Qué hace este código?**
+1. El servicio `DataService` hace una solicitud HTTP y devuelve un observable.
+2. En el componente, usas `subscribe` para "escuchar" la respuesta.
+3. Cuando llegan los datos, se asignan a la variable `datos` y se muestran en la plantilla.

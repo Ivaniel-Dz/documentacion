@@ -17,6 +17,7 @@ Spring Boot permite desarrollar aplicaciones bajo diferentes tipos de arquitectu
 - **Reactiva**: Basada en eventos y asincronismo para mejorar el rendimiento.
 
 ## Spring MVC
+![preview](./img/mvc.jpg)
  MVC es un patrón de diseño que contiene tres componentes principales:
  - **Modelo (Model)**:Gestiona los datos de la aplicación y la lógica de negocio.
  - **Vista (View)**:Encargada de presentar los datos al usuario.
@@ -120,3 +121,32 @@ Las anotaciones en Spring Boot son metadatos utilizados para simplificar la conf
 | `@Lob` | Define un campo como un objeto de gran tamaño (Large Object). | Para almacenar archivos grandes en la base de datos. |
 | `@Cacheable` | Habilita el almacenamiento en caché de un método. | Cuando se quiere optimizar el acceso a datos frecuentemente consultados. |
 
+## Estructura de Carpeta de un Proyecto
+```bash
+- src
+  - main
+    - java
+      - com.example.projectname
+        - controller
+        - model
+        - dto
+        - service
+        - repository
+        - config
+        - exception
+    - resources
+      - static
+        - css
+        - js
+        - images
+      - templates
+      - application.properties
+  - test
+    - java
+      - com.example.projectname
+        - controller
+        - service
+- .gitignore
+- pom.xml (si usas Maven) o build.gradle (si usas Gradle)
+- README.md
+```

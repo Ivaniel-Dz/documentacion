@@ -354,4 +354,27 @@ Navega a `http://localhost:5000/Home/Index` y verás la página generada.
 
 ---
 
-Con estos conocimientos, ya tienes una base sólida en .NET para crear proyectos tanto simples como avanzados.
+## Estructura de Carpeta de un Proyecto
+```bash
+- src
+  - ProjectName
+    - Controllers
+    - Models
+    - DTOs
+    - Services
+    - Repositories
+    - Views
+    - wwwroot
+      - css
+      - js
+      - images
+    - Data
+    - Migrations
+    - Properties
+  - ProjectName.Tests
+    - UnitTests
+    - IntegrationTests
+- .gitignore
+- ProjectName.sln
+- README.md
+```

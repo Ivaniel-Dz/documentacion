@@ -229,3 +229,10 @@ docker compose scale <servicio>=<número>
 * **Explora las opciones:** Cada comando tiene numerosas opciones que te permiten personalizar su comportamiento.
 * **Practica regularmente:** La mejor manera de aprender Docker es practicando con diferentes escenarios.
 
+## Cheat Sheet
+![preview](./img/1.jpg)
+![preview](./img/2.jpg)
+![preview](./img/3.jpg)
+![preview](./img/4.jpg)
+![preview](./img/5.jpg)
+![preview](./img/6.jpg)

@@ -18,6 +18,7 @@ ng g m core --routing         # Crear un módulo con enrutamiento
 ng generate directive highlight  # Crear una directiva personalizada
 ng generate pipe currencyFormat  # Crear un pipe personalizado
 ng generate interface user    # Crear una interfaz
+ng generate interceptor interceptors/auth # Crea un interceptor
 ng generate class models/user # Crear una clase
 ng generate enum userRoles    # Crear un enum
 ng g @angular/core:control-flow # actualiza las directivas ej: *ngFor a @For

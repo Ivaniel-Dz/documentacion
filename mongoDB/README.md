@@ -544,127 +544,35 @@ export default Page;
 ```
 
 ## Conexión de MongoDB con Java Sprint Boot
-- Dependencias en ``pom.xml``:
-```java
+- Dependencia:
+```xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-data-mongodb</artifactId>
 </dependency>
-
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
 ```
 
-- Configuración en ``application.properties``:
-```java
+- Config formato application.properties:
+```properties
+# Configuración de MongoDB
+spring.data.mongodb.uri=mongodb://localhost:27017/nombre_de_tu_base_de_datos
+```
+
+- Config formato completo application.properties:
+```properties
 spring.data.mongodb.host=localhost
 spring.data.mongodb.port=27017
-spring.data.mongodb.database=nombre_base_datos
+spring.data.mongodb.database=nombre_de_tu_base_de_datos
+spring.data.mongodb.username=tu_usuario
+spring.data.mongodb.password=tu_contraseña
 ```
 
-- Modelo:
-```java
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "usuarios")
-public class Usuario {
-
-    @Id
-    private String id;
-    private String nombre;
-    private int edad;
-
-    // Getters y Setters
-}
-```
-
-- Repositorio
-```java
-import org.springframework.data.mongodb.repository.MongoRepository;
-
-public interface UsuarioRepository extends MongoRepository<Usuario, String> {
-}
-```
-
- ## Conexión a MongoDB con Spring Framework (Java)
- - Dependencias en ``pom.xml``:
- ```java
- <dependency>
-    <groupId>org.springframework.data</groupId>
-    <artifactId>spring-data-mongodb</artifactId>
-    <version>3.2.4</version>
-</dependency>
-
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-context</artifactId>
-    <version>5.3.18</version>
-</dependency>
-```
-
-- Configuración en ``applicationContext.xml``:
- ```java
- <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans 
-        http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <!-- MongoDB Factory -->
-    <bean id="mongoClient" class="com.mongodb.client.MongoClients" factory-method="create">
-        <constructor-arg value="mongodb://localhost:27017"/>
-    </bean>
-
-    <!-- Definir MongoTemplate -->
-    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg ref="mongoClient"/>
-        <constructor-arg value="nombre_base_datos"/>
-    </bean>
-
-</beans>
-```
-
-- Entidad (Modelo):
- ```java
- import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "usuarios")
-public class Usuario {
-
-    @Id
-    private String id;
-    private String nombre;
-    private int edad;
-
-    // Getters y Setters
-}
-```
-
-- DAO (Data Access Object):
- ```java
- import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
-@Repository
-public class UsuarioDao {
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
-    public List<Usuario> obtenerUsuarios() {
-        return mongoTemplate.findAll(Usuario.class);
-    }
-
-    public void guardarUsuario(Usuario usuario) {
-        mongoTemplate.save(usuario);
-    }
-}
+- Config En formato application.yml:
+```yml
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/nombre_de_tu_base_de_datos
 ```
 
 ### Consideraciones:

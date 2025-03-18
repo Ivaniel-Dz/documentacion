@@ -348,125 +348,44 @@ run();
 ```
 
 ## Conexión de Oracle con Java Sprint Boot
-- Dependencias en ``pom.xml``:
-```java
-<dependency>
-    <groupId>com.oracle.database.jdbc</groupId>
-    <artifactId>ojdbc8</artifactId>
-    <version>19.8.0.0</version>
-</dependency>
 
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-data-jpa</artifactId>
-</dependency>
+- Dependencia:
 
+```xml
 <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
+   <groupId>com.oracle.database.jdbc</groupId>
+    <artifactId>ojdbc11</artifactId>
+    <scope>runtime</scope>
 </dependency>
 ```
 
-- Configuración en ``application.properties``:
-```js
-spring.datasource.url=jdbc:oracle:thin:@localhost:1521/XE
-spring.datasource.username=tu_usuario
-spring.datasource.password=tu_contraseña
+- Configuración:
+```properties
+# Configuración de la base de datos (Oracle)
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521:ORCLCDB
+spring.datasource.username=TU_USUARIO
+spring.datasource.password=TU_CONTRASENA
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 
-spring.jpa.hibernate.ddl-auto=update
+# Configuración de JPA y Hibernate
 spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle12cDialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.Oracle12cDialect
 ```
 
-- Repositorio y Modelo
-```java
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class Usuario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nombre;
-    private int edad;
-
-    // Getters y Setters
-}
-```
-
-```bash
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-}
-```
-
- ## Conexión a Oracle con Spring Framework (Java)
- - Dependencias en ``pom.xml``:
- ```java
- <dependency>
-    <groupId>com.oracle.database.jdbc</groupId>
-    <artifactId>ojdbc8</artifactId>
-    <version>19.8.0.0</version>
-</dependency>
-
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-context</artifactId>
-    <version>5.3.18</version>
-</dependency>
-
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-jdbc</artifactId>
-    <version>5.3.18</version>
-</dependency>
-
-<dependency>
-    <groupId>org.hibernate</groupId>
-    <artifactId>hibernate-core</artifactId>
-    <version>5.6.9.Final</version>
-</dependency>
-```
-
-- Configuración en ``applicationContext.xml``:
- ```java
- <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans 
-        http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <!-- Definir DataSource para Oracle -->
-    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-        <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
-        <property name="username" value="tu_usuario"/>
-        <property name="password" value="tu_contraseña"/>
-    </bean>
-
-    <!-- Configuración de Hibernate -->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.tuapp.modelo"/>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.Oracle12cDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-            </props>
-        </property>
-    </bean>
-
-    <!-- Definir el TransactionManager -->
-    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-</beans>
+configuración en version yml
+```yml
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:ORCLCDB
+    username: TU_USUARIO
+    password: TU_CONTRASENA
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.Oracle12cDialect
 ```
 
 Entidad y DAO:

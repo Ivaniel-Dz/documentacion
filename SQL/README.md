@@ -347,175 +347,92 @@ export default Page;
 ```
 
 ## Conexión de MySQL con Java Sprint Boot
-- Dependencias en`` pom.xml``:
-```java
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <scope>runtime</scope>
-</dependency>
+- Instalar la dependencia: MySQL Driver
 
+```xml
 <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-data-jpa</artifactId>
-</dependency>
-
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
+   <groupId>com.mysql</groupId>
+   <artifactId>mysql-connector-j</artifactId>
+   <scope>runtime</scope>
 </dependency>
 ```
 
-- Configuración en ``application.properties``:
-```java
-spring.datasource.url=jdbc:mysql://localhost:3306/nombre_base_datos
+- Configurar la conexión en formato properties:
+```properties
+spring.application.name=proyecto-nombre
+spring.datasource.url=jdbc:mysql://localhost:3306/bd-nombre
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+```
+
+- Configurar la conexión en formato yml:
+```yml
+spring:
+  application:
+    name: login-backend
+  datasource:
+    url: jdbc:mysql://localhost:3306/login
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET:default-secret-key}
+      expiration: 86400000  # 1 día en milisegundos
+      refresh-token:
+        secret-key: ${JWT_REFRESH_SECRET:default-refresh-secret}
+        expiration: 604800000  # 7 días en milisegundos
+
+```
+
+## Conexión de SQL Server con Java Sprint Boot
+- Dependencia:
+```xml
+<dependency>
+    <groupId>com.microsoft.sqlserver</groupId>
+    <artifactId>mssql-jdbc</artifactId>
+    <version>12.4.0.jre11</version> <!-- Usa la versión más reciente compatible con tu JDK -->
+</dependency>
+```
+
+- Config en formato application.properties:
+```properties
+# Configuración de la base de datos (SQL Server)
+spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=nombre_de_tu_base_de_datos
 spring.datasource.username=tu_usuario
 spring.datasource.password=tu_contraseña
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
 
-spring.jpa.hibernate.ddl-auto=update
+# Configuración de JPA y Hibernate
 spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.SQLServer2012Dialect
 ```
 
-- Repositorio y Modelo:
-```java
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class Usuario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nombre;
-    private int edad;
-
-    // Getters y Setters
-}
-```
-
-```java
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-}
-```
-
- ## Conexión a MySQL con Spring Framework (Java)
- - Dependencias en ``pom.xml``:
- ```java
- <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>8.0.30</version>
-</dependency>
-
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-context</artifactId>
-    <version>5.3.18</version>
-</dependency>
-
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-jdbc</artifactId>
-    <version>5.3.18</version>
-</dependency>
-
-<dependency>
-    <groupId>org.hibernate</groupId>
-    <artifactId>hibernate-core</artifactId>
-    <version>5.6.9.Final</version>
-</dependency>
-```
-
-- Configuración en ``applicationContext.xml``:
- ```java
- <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans 
-        http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <!-- Definir DataSource -->
-    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/nombre_base_datos"/>
-        <property name="username" value="tu_usuario"/>
-        <property name="password" value="tu_contraseña"/>
-    </bean>
-
-    <!-- Configuración de Hibernate -->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.tuapp.modelo"/>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-            </props>
-        </property>
-    </bean>
-
-    <!-- Definir el TransactionManager -->
-    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-</beans>
-```
-
-- Entidad (Modelo):
- ```java
- import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class Usuario {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nombre;
-    private int edad;
-
-    // Getters y Setters
-}
-```
-
-- DAO (Data Access Object):
- ```java
- import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-@Repository
-public class UsuarioDao {
-
-    @Autowired
-    private SessionFactory sessionFactory;
-
-    @Transactional
-    public List<Usuario> obtenerUsuarios() {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from Usuario", Usuario.class).list();
-    }
-
-    @Transactional
-    public void guardarUsuario(Usuario usuario) {
-        Session session = sessionFactory.getCurrentSession();
-        session.saveOrUpdate(usuario);
-    }
-}
+- Config en formato application.yml:
+```yaml
+spring:
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=nombre_de_tu_base_de_datos
+    username: tu_usuario
+    password: tu_contraseña
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.SQLServer2012Dialect
 ```
 
 ### Consideraciones:

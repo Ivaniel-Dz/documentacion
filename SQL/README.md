@@ -346,15 +346,19 @@ const Page = ({ data }) => (
 export default Page;
 ```
 
-## Conexión de MySQL con Java Sprint Boot
+## Conexión de MySQL con Sprint Boot
 - Instalar la dependencia: MySQL Driver
 
 ```xml
-<dependency>
-   <groupId>com.mysql</groupId>
-   <artifactId>mysql-connector-j</artifactId>
-   <scope>runtime</scope>
-</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 ```
 
 - Configurar la conexión en formato properties:
@@ -396,14 +400,18 @@ application:
 
 ```
 
-## Conexión de SQL Server con Java Sprint Boot
+## Conexión de SQL Server con Sprint Boot
 - Dependencia:
 ```xml
-<dependency>
-    <groupId>com.microsoft.sqlserver</groupId>
-    <artifactId>mssql-jdbc</artifactId>
-    <version>12.4.0.jre11</version> <!-- Usa la versión más reciente compatible con tu JDK -->
-</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 ```
 
 - Config en formato application.properties:
@@ -433,6 +441,70 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.SQLServer2012Dialect
+```
+
+## Conexión de MySQL con Laravel
+```bash
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=databaseName
+DB_USERNAME=root # tu user DB
+DB_PASSWORD=root #Tu pass DB
+```
+
+## Conexión de SQL Server con Laravel
+### Instalar el controlador de SQL Server para PHP:
+
+1. Descarga los controladores desde el repositorio oficial de Microsoft:
+    - [Microsoft Drivers for PHP for SQL Server.](https://github.com/microsoft/msphpsql/releases)
+
+2. Elige la versión compatible con tu versión de PHP.
+
+3. Extrae los archivos .dll y colócalos en la carpeta ext de tu instalación de PHP.
+
+4. Edita el archivo php.ini y agrega las siguientes líneas:
+```bash
+extension=php_sqlsrv.dll
+extension=php_pdo_sqlsrv.dll
+```
+
+5. Reinicia tu servidor web (Apache, Nginx, etc.).
+
+### Configuración ``.env``
+```bash
+DB_CONNECTION=sqlsrv
+DB_HOST=16.0.1000
+DB_PORT=1433
+DB_DATABASE=nombre_de_la_base_de_datos
+DB_USERNAME=usuario
+DB_PASSWORD=contraseña
+```
+
+## Conexión de MySQL con .NET
+- Instala el paquete NuGet de Entity Framework Core para MySQL:
+```bash
+dotnet add package Pomelo.EntityFrameworkCore.MySql
+```
+
+- Cadena de Conexión:
+```bash
+    "ConnectionStrings": {
+        "CadenaSQL": "Server=localhost;Database=FacturacionAPI;User=root;Password=root;SslMode=Required;"
+    },
+```
+
+## Conexión de SQL Server con .NET
+- Instala el paquete NuGet de Entity Framework Core para SQL Server:
+```bash
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+```
+
+- Cadena de Conexión:
+```bash
+    "ConnectionStrings": {
+        "connection": "Data Source=(local)\\SQLEXPRESS;Initial Catalog=InventarioProductos;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True;"
+    },
 ```
 
 ### Consideraciones:

@@ -347,16 +347,20 @@ async function run() {
 run();
 ```
 
-## Conexión de Oracle con Java Sprint Boot
+## Conexión de Oracle con Sprint Boot
 
 - Dependencia:
 
 ```xml
-<dependency>
-   <groupId>com.oracle.database.jdbc</groupId>
-    <artifactId>ojdbc11</artifactId>
-    <scope>runtime</scope>
-</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 ```
 
 - Configuración:
@@ -390,6 +394,48 @@ spring:
 
 Entidad y DAO:
 Los modelos y DAOs son los mismos que en la sección de MySQL, excepto que la configuración del dialecto de Hibernate cambia a ```Oracle12cDialect```.
+
+## Conexión de Oracle con laravel
+- Configurar la conexión`` .env``
+```bash
+DB_CONNECTION=oracle
+DB_HOST=127.0.0.1
+DB_PORT=1521
+DB_DATABASE=ORCL
+DB_USERNAME=LIBRERIA #Tu BD
+DB_PASSWORD=LB2024 #Tu pass de BD
+```
+
+-  ``config/database.php`` (Se agrega manual)
+```bash
+    'oracle' => [
+        'driver'         => 'oracle',
+        'tns'            => env('DB_TNS', ''),
+        'host'           => env('DB_HOST', '127.0.0.1'),
+        'port'           => env('DB_PORT', '1521'),
+        'database'       => env('DB_DATABASE', 'ORCL'),
+        'username'       => env('DB_USERNAME', 'LIBRERIA'),
+        'password'       => env('DB_PASSWORD', 'LB2024'),
+        'charset'        => env('DB_CHARSET', 'AL32UTF8'),
+        'prefix'         => '',
+        'prefix_schema'  => env('DB_SCHEMA_PREFIX', ''),
+        'edition'        => env('DB_EDITION', 'ora$base'),
+        'server_version' => env('DB_SERVER_VERSION', '19c'),
+    ],
+```
+
+## Conexión de Oracle con .NET
+- Instalar paquete NuGet Oracle.EntityFrameworkCore para Oracle:
+```bash
+dotnet add package Oracle.EntityFrameworkCore
+```
+
+- Configurar la cadena de conexión:
+```bash
+"ConnectionStrings": {
+  "OracleConnection": "User Id=usuario;Password=contraseña;Data Source=//host:puerto/servicio;"
+}
+```
 
 ### Consideraciones:
 - **``Seguridad:``** Nunca conectes directamente desde el frontend a una base de datos. El acceso a las bases de datos debe estar detrás de una API o servidor.

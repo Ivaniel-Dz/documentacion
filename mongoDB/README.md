@@ -543,7 +543,7 @@ const Page = ({ data }) => (
 export default Page;
 ```
 
-## Conexión de MongoDB con Java Sprint Boot
+## Conexión de MongoDB con Sprint Boot
 - Dependencia:
 ```xml
 <dependency>
@@ -573,6 +573,35 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/nombre_de_tu_base_de_datos
+```
+
+## Conexión de MongoDB con .NET
+- Instala paquete NuGet MongoDB.Driver: Es el driver oficial de MongoDB para .NET.
+```bash
+dotnet add package MongoDB.Driver
+```
+
+- Configurar la cadena de conexión:
+```bash
+"ConnectionStrings": {
+  "MongoDBConnection": "mongodb://usuario:contraseña@host:puerto"
+}
+```
+
+## Conexión de MongoDB con Laravel
+- Paquete de MongoDB:
+```bash
+composer require jenssegers/mongodb
+```
+
+- Configurar la conexión a MongoDB (.env)
+```bash
+DB_CONNECTION=mongodb
+DB_HOST=127.0.0.1
+DB_PORT=27017
+DB_DATABASE=nombre_de_tu_base_de_datos
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
 ```
 
 ### Consideraciones:

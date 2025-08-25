@@ -1,7 +1,3 @@
-Aquí te presento la documentación actualizada, que ahora incluye los nuevos temas mencionados, con una explicación detallada y un ejemplo final de cómo crear un proyecto MVC en .NET.
-
----
-
 # **C# .NET**
 
 ## **1. Introducción a .NET**
@@ -378,3 +374,97 @@ Navega a `http://localhost:5000/Home/Index` y verás la página generada.
 - ProjectName.sln
 - README.md
 ```
+
+## 📌 Configuración de Conexión a Bases de Datos con EF Core
+- MS SQL Server:
+```json
+{
+  "ConnectionStrings": {
+    "ConnectionDB": "Data Source=(local)\\SQLEXPRESS;Initial Catalog=nameBD;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True;"
+  }
+}
+```
+
+- MySQL
+```json
+{
+  "ConnectionStrings": {
+    "ConnectionDB": "Server=localhost;Database=nameDB;User=root;Password=root;SslMode=Required;"
+  }
+}
+```
+
+- PostgreSQL:
+```json
+{
+  "ConnectionStrings": {
+    "ConnectionDB": "Host=localhost;Database=nameDB;Username=postgres;Password=postgres"
+  }
+}
+```
+
+- **Program.cs**
+```bash
+// Configuración de la base de datos (Postgres)
+builder.Services.AddDbContext<AppDBContext>(options =>
+{
+    options.``UsePackage``(builder.Configuration.GetConnectionString("ConnectionDB"));
+});
+```
+**UsePackage:**
+- PostgreSQL = ``UseNpgsql``
+- MySQL = ``UseMySql``
+- SQL Server = ``UseSqlServer``
+
+## 📦 Paquetes NuGet
+
+### Entity Framework Core
+
+* **Microsoft.EntityFrameworkCore** → Núcleo de EF Core, permite trabajar con modelos y LINQ.
+* **Microsoft.EntityFrameworkCore.Tools** → Herramientas para generar migraciones y administrar la BD desde la consola.
+
+### Proveedores de Base de Datos
+
+* **Microsoft.EntityFrameworkCore.SqlServer** → Proveedor para conectar con **MS SQL Server**.
+* **Pomelo.EntityFrameworkCore.MySql** → Proveedor para conectar con **MySQL/MariaDB**.
+* **Npgsql.EntityFrameworkCore.PostgreSQL** → Proveedor para conectar con **PostgreSQL**.
+* *(MongoDB no tiene soporte oficial de EF Core, se usa con librerías externas como MongoDB.Driver).*
+
+### Autenticación
+
+* **Microsoft.AspNetCore.Authentication.Cookies** → Autenticación basada en **cookies** (sesiones clásicas).
+* **Microsoft.AspNetCore.Authentication.JwtBearer** → Autenticación con **JSON Web Tokens (JWT)**.
+* **Google.Apis.Auth** → Autenticación con **Google OAuth2**.
+
+---
+
+## 🛠️ Comandos de EF Core Tools (Visual Studio / PMC)
+
+* **Add-Migration "Nombre"** → Genera una nueva clase de migración según los cambios en el modelo.
+* **Update-Database** → Aplica las migraciones a la BD (crea la BD si no existe).
+* **Remove-Migration** → Elimina la última migración pendiente (no aplicada).
+
+---
+
+## 🛠️ Comandos .NET CLI
+
+* **dotnet restore** → Descarga y restaura las dependencias definidas en el `.csproj`.
+* **dotnet list package** → Lista los paquetes NuGet instalados en el proyecto.
+* **dotnet ef migrations add Nombre** → Crea una migración desde la CLI (equivalente a `Add-Migration`).
+* **dotnet ef database update** → Aplica las migraciones a la BD desde la CLI.
+* **dotnet add package NombreDelPaquete** → Instala un paquete NuGet en el proyecto.
+---
+
+
+## 🔑 JWT (JSON Web Token) VS 🍪 Cookies
+
+### 🚀 Diferencias prácticas
+
+| Aspecto             | JWT                                           | Cookies                                                        |
+| ------------------- | --------------------------------------------- | -------------------------------------------------------------- |
+| **Dónde se guarda** | Cliente (localStorage, sessionStorage, etc.)  | Navegador (cookie automática)                                  |
+| **Ideal para**      | APIs REST, SPA (Angular, React, Vue), móviles | Web apps clásicas con servidor que maneja vistas, MVC o Razor Pages |
+| **Escalabilidad**   | Fácil distribuir (stateless)                  | Requiere manejar sesión compartida si hay múltiples servidores |
+| **Seguridad**       | Vulnerable si se guarda mal en frontend       | Protegidas con `HttpOnly`, pero dependen de dominio            |
+
+---

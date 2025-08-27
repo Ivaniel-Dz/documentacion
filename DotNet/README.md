@@ -404,7 +404,7 @@ Navega a `http://localhost:5000/Home/Index` y verás la página generada.
 ```
 
 - **Program.cs**
-```bash
+```cs
 // Configuración de la base de datos (Postgres)
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
@@ -468,3 +468,40 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 | **Seguridad**       | Vulnerable si se guarda mal en frontend       | Protegidas con `HttpOnly`, pero dependen de dominio            |
 
 ---
+
+## mapeo entre DTOs ↔ Entidades
+- Si usas directamente ``Models`` → no hay que mapear (ya es la entidad).
+- Si usas ``DTOs`` → sí necesitas mapear (AutoMapper o SetValues).
+
+### Comparaciones 
+- **``Manual``** = control, simple, pero repetitivo.
+```cs
+var entity = new Library
+{
+    Id = dto.Id,
+    Name = dto.Name,
+    Address = dto.Address
+};
+```
+
+- **``AutoMapper``** = recomendado para proyectos medianos/grandes.
+```cs
+var entity = _mapper.Map<Library>(dto);
+```
+
+- **``SetValues``** = sirve, pero no es lo más limpio fuera de EF (se usa más en repositorios que en servicios).
+```cs
+var entity = new Library();
+_context.Entry(entity).CurrentValues.SetValues(dto);
+```
+
+### Combinación de Mapeo
+```cs
+// Mapeo automático con AutoMapper
+var newLibrary = _mapper.Map<Library>(libraryDto);
+
+// Sobrescribir campos que no vienen del DTO
+newLibrary.UserId = userId;
+newLibrary.Clave = _encryptor.Encrypt(libraryDto.Clave);
+```
+

@@ -45,6 +45,16 @@ ng config                    # Ver o modificar la configuración
 ng version                   # Mostrar la versión de Angular CLI
 ```
 
+### **Comandos de Angular (Cuando no esta instalado de forma global)**
+> Cuando Angular no esta instalado de forma global, si no por proyectos se usa el commando ``npx`` antes de ``ng``, para usar todo los comandos de angular. Ejemplo:
+```bash
+npx -p @angular/cli@17 ng new [nameProject]   # Version especifica
+npx @angular/cli@latest new [nameProject]     # Ultima version
+npx ng version                                # Verificar version instalado
+npx ng serve                                  # Ejecuta el servidor
+npx ng generate component nameComponent       # Crear un componente
+```
+
 ## Arquitectura y patrones de diseño:
 - **Modularidad**: La aplicación se organiza en módulos que agrupan funcionalidades relacionadas. Esto permite que cada módulo sea desarrollado, probado y mantenido de forma independiente.
 - **Componentes**: Son las unidades básicas de la interfaz. Cada componente tiene su propia lógica y vista.
@@ -782,3 +792,50 @@ export class AppComponent implements OnInit {
 1. El servicio `DataService` hace una solicitud HTTP y devuelve un observable.
 2. En el componente, usas `subscribe` para "escuchar" la respuesta.
 3. Cuando llegan los datos, se asignan a la variable `datos` y se muestran en la plantilla.
+
+## SSR
+SSR (Server-Side Rendering) es una técnica donde la aplicación Angular se renderiza en el servidor (Node.js) y se envía al navegador como HTML ya generado, en lugar de enviar solo un bundle JavaScript para que el navegador lo renderice.
+
+En Angular moderno (v16+ hasta v21), SSR está oficialmente soportado mediante Angular y Angular Universal.
+
+### 🎯 ¿Cuándo usar SSR?
+
+**Usa SSR cuando:**
+- ✅ Necesitas SEO real (blogs, e-commerce, landing pages)
+- ✅ El contenido debe ser indexado por Google
+- ✅ Buscas mejor First Contentful Paint (FCP)
+- ✅ Quieres compartir URLs con preview (Open Graph)
+
+**No lo uses cuando:**
+- ❌ Es un dashboard privado
+- ❌ Es un panel admin autenticado
+- ❌ Es un sistema interno
+
+> Se puede instalar de dos forma, cuando se crea el proyecto de pide si quieres agregar en tu proyecto (Y/N)
+
+> Y otra forma seria después de crear el proyecto y quieres agregarlo ya en tu proyecto creado.
+
+```bash
+ng add @angular/ssr
+```
+Angular CLI automáticamente configura:
+- Build para browser
+- Build para server
+- Servidor Node (Express)
+
+### Archivos que se crean automáticamente
+```bash
+src/
+ ├── main.ts
+ ├── main.server.ts
+server.ts
+angular.json (modificado)
+tsconfig.server.json
+```
+
+### 🔬 Flujo de renderizado
+**Sin SSR (CSR)**
+- Servidor → envía index.html vacío → navegador ejecuta JS → renderiza
+
+**Con SSR**
+- Servidor ejecuta Angular → genera HTML → envía HTML ya renderizado → navegador hidrata

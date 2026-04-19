@@ -37,7 +37,7 @@ ng e2e                       # Ejecutar pruebas end-to-end
 
 ### **Comandos de configuración**
 ```bash
-npm install -g @angular/cli  # Instalación de cli de angular (-g instalación global)
+npm install -g @angular/cli  # Instalación de la ultima version de CLI Angular (-g instalación global)
 ng add @angular/material     # Instalar Angular Material
 ng add @ngrx/store          # Agregar NgRx al proyecto
 ng update                    # Actualizar Angular y dependencias
@@ -45,14 +45,20 @@ ng config                    # Ver o modificar la configuración
 ng version                   # Mostrar la versión de Angular CLI
 ```
 
-### **Comandos de Angular (Cuando no esta instalado de forma global)**
-> Cuando Angular no esta instalado de forma global, si no por proyectos se usa el commando ``npx`` antes de ``ng``, para usar todo los comandos de angular. Ejemplo:
+### **Comandos de Angular npx**
+> ``npx`` se usa en estos escenarios:
+
+> Cuando Angular no esta instalado de forma global, si no por proyectos se usa el commando ``npx`` antes de ``ng``, para usar todo los comandos de angular. 
+
+> Si tengo instalado la ultima version de angular pero mi proyecto esta hecho o sera desarrollador por una version anterior se usa npx, para que no se rompa el proyecto.
+
 ```bash
-npx -p @angular/cli@17 ng new [nameProject]   # Version especifica
-npx @angular/cli@latest new [nameProject]     # Ultima version
+npx -p @angular/cli@17 ng new [nameProject]   # Crear proyecto con Version especifica
+npx @angular/cli@latest new [nameProject]     # Crear proyecto con Ultima version
 npx ng version                                # Verificar version instalado
 npx ng serve                                  # Ejecuta el servidor
 npx ng generate component nameComponent       # Crear un componente
+npx ng generate ...                           # se usa los mismos comandos solo se agrega npx
 ```
 
 ## Arquitectura y patrones de diseño:
@@ -140,6 +146,7 @@ my-angular-project/
 
     * **`environments/`**:
         * Configuraciones específicas para diferentes entornos (desarrollo, producción, etc.).
+        * Agregar la ruta en la configuración principal (``angular.json``)
 
     * **`index.html`**:
         * La página HTML principal de la aplicación.
@@ -336,7 +343,7 @@ El módulo `CommonModule` proporciona directivas como `ngIf`, `ngFor` y otras ut
 ## **Directivas**
 ### **Diferencia entre directivas ng vs @**
 ### ngFor, ngIF y etc: 
->Esta es la forma tradicional de manejar condicionales en Angular.
+>Esta es la forma tradicional de manejar condicionales en Angular. A partir del *v22* ya esta en desuso.
 
 ✅ **Ventajas:**
 - Compatible con todas las versiones de Angular.
@@ -435,6 +442,25 @@ El módulo `CommonModule` proporciona directivas como `ngIf`, `ngFor` y otras ut
 
   <p *ngIf="favGame !== ''">Tu juego favorito es {{ favGame }}</p>
 </section>
+```
+
+### Ejemplo de @for
+```bash
+<!-- app.component.html -->
+<ul>
+  @for (usuario of usuarios; track $index) {
+    <li>{{ $index }} - {{ usuario }}</li>
+  }
+</ul>
+```
+### Ejemplo de *ngFor
+```bash
+<!-- app.component.html -->
+<ul>
+  <li *ngFor="let usuario of usuarios; index as i">
+    {{ i }} - {{ usuario }}
+  </li>
+</ul>
 ```
 
 ## **Decoradores**  

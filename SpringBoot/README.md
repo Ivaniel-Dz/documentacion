@@ -1,5 +1,4 @@
-# Spring Boot
-<p align="center"><a href="https://docs.spring.io/spring-boot/documentation.html" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/368px-Spring_Framework_Logo_2018.svg.png" width="400" alt="spring Logo"></a></p>
+# [Spring Boot](https://spring.io/)
 
 ## Spring Framework
 Spring Framework es un marco de trabajo para el desarrollo de aplicaciones Java empresariales. Proporciona infraestructura y herramientas para facilitar la creación de aplicaciones robustas, escalables y mantenibles, permitiendo la inversión de control (IoC), inyección de dependencias (DI) y soporte para programación orientada a aspectos (AOP).
@@ -13,7 +12,9 @@ Spring Boot es una extensión de Spring Framework que simplifica la configuraci�
 ## Tipos de Arquitectura
 Spring Boot permite desarrollar aplicaciones bajo diferentes tipos de arquitecturas, entre ellas:
 - **Monolítica**: Toda la lógica de negocio y acceso a datos se ejecuta en una sola aplicación.
+![preview](./img/Monolitico_.webp)
 - **Microservicios**: Divide la aplicación en servicios independientes que se comunican entre sí.
+![preview](./img/microservice.png)
 - **Reactiva**: Basada en eventos y asincronismo para mejorar el rendimiento.
 
 ## Spring MVC

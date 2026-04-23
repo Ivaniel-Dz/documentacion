@@ -221,6 +221,18 @@ En un proyecto con **Ionic + Angular**, la configuración para autenticación **
        }
        ```
 
+      #### Tabla de Comparación
+
+      | | `@ionic/storage-angular` | `@capacitor/preferences` |
+      |---|---|---|
+      | Persistencia nativa | Depende del driver | ✅ Siempre nativa |
+      | Solo strings | No (serializa objetos) | ⚠️ Solo strings (JSON.stringify manual) |
+      | Soporte PWA/web | ✅ Mejor | ❌ Cae a localStorage |
+      | Mantenimiento activo | Moderado | ✅ Equipo Capacitor |
+      | Recomendado por Ionic docs | No explícitamente | ✅ Sí |
+
+      ---
+
 ### 2. **Protección de Rutas**
    - En Ionic, la navegación suele ser por `tabs` o `ion-router-outlet`, pero los `Guards` de Angular funcionan igual.  
    - Ejemplo de guard:

